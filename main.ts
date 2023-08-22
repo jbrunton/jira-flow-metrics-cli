@@ -4,10 +4,10 @@ import { client } from "./data/client";
 import { IssueBuilder } from "./data/issue_builder";
 import { JiraFieldsRepository } from "./data/jira_fields_repository";
 import { JiraStatusRepository } from "./data/jira_status_repository";
-import { HierarchyLevel, StatusCategory } from "./domain/entities";
-import { chain, pick, min } from "lodash";
+import { cycleTimeMetrics } from "./domain/usecases/metrics/cycle_times";
+import { select } from "@inquirer/prompts";
 
-const main = async () => {
+const cycleTimeMetricsAction = async () => {
   const jql = "filter='Filter for MET board'";
 
   const issuesRepository = new JiraIssuesRepository(client);
@@ -37,22 +37,35 @@ const main = async () => {
   });
   progressBar.stop();
 
-  const storyCycleTimes = chain(issues)
-    .filter(
-      (issue) =>
-        issue.hierarchyLevel === HierarchyLevel.Story &&
-        issue.statusCategory === StatusCategory.Done &&
-        issue.cycleTime !== undefined,
-    )
-    .map((issue) =>
-      pick(issue, ["key", "summary", "started", "completed", "cycleTime"]),
-    )
-    .sortBy("cycleTime")
-    .reverse()
-    .take(5)
-    .value();
+  const storyCycleTimes = cycleTimeMetrics(issues);
 
   console.table(storyCycleTimes);
+};
+
+const main = async () => {
+  const answer = await select({
+    message: "Select an option",
+    choices: [
+      {
+        name: "Metrics",
+        value: "metrics",
+        description: "Cycle time metrics for longest stories",
+      },
+      {
+        name: "Quit",
+        value: "quit",
+        description: "Exit the program",
+      },
+    ],
+  });
+
+  if (answer === "metrics") {
+    await cycleTimeMetricsAction();
+  }
+
+  if (answer !== "quit") {
+    await main();
+  }
 };
 
 main().catch((e) => {

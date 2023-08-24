@@ -1,22 +1,19 @@
-import { HierarchyLevel, StatusCategory } from "../../../domain/entities";
-import { chain, pick } from "lodash";
-import { Issue } from "../../entities";
+import { HierarchyLevel, StatusCategory } from "../../../domain/entities.js";
+import { filter, pick, map, sortBy, reverse, pipe } from "rambda";
+import { Issue } from "../../entities.js";
 
 export const cycleTimeMetrics = (issues: Issue[]) => {
-  const storyCycleTimes = chain(issues)
-    .filter(
-      (issue) =>
+  const storyCycleTimes = pipe(
+    filter(
+      (issue: Issue) =>
         issue.hierarchyLevel === HierarchyLevel.Story &&
         issue.statusCategory === StatusCategory.Done &&
         issue.cycleTime !== undefined,
-    )
-    .map((issue) =>
-      pick(issue, ["key", "summary", "started", "completed", "cycleTime"]),
-    )
-    .sortBy("cycleTime")
-    .reverse()
-    .take(5)
-    .value();
+    ),
+    map(pick(["key", "summary", "started", "completed", "cycleTime"])),
+    sortBy((issue: Issue) => issue.cycleTime),
+    reverse<Issue>,
+  )(issues);
 
   return storyCycleTimes;
 };

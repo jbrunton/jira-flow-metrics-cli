@@ -6,8 +6,8 @@ import {
   Status,
   StatusCategory,
   Transition,
-} from "../domain/entities";
-import { compact } from "lodash";
+} from "../domain/entities.js";
+import { reject, isNil } from "rambda";
 
 export class IssueBuilder {
   private readonly statusCategories: { [externalId: string]: string } = {};
@@ -55,7 +55,7 @@ export class IssueBuilder {
 
   buildTransitions(json: Version3Models.Issue): Transition[] {
     //console.log("buildTransitions", json);
-    const transitions: Transition[] = compact(
+    const transitions: Transition[] = reject(isNil)(
       json.changelog?.histories?.map((event) => {
         const statusChange = event.items?.find(
           (item) => item.field == "status",

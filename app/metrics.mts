@@ -3,6 +3,8 @@ import { LocalProjectsRepository } from "../data/local_projects_repository.mjs";
 import { db } from "../data/db.mjs";
 import { LocalIssuesRepository } from "../data/local_issues_repository.mjs";
 import { cycleTimeMetrics } from "../domain/usecases/metrics/cycle_times.js";
+import { startOfDay, subDays } from "date-fns";
+import { promptInterval } from "./prompts/interval.mjs";
 
 const projectsRepository = new LocalProjectsRepository(db);
 const localIssuesRepository = new LocalIssuesRepository(db);
@@ -18,8 +20,15 @@ const storyCycleTimesAction = async () => {
     })),
   });
 
+  const now = new Date();
+  const defaultEnd = subDays(startOfDay(now), 30);
+
+  const { start, end } = await promptInterval(now, defaultEnd);
+
   const issues = await localIssuesRepository.getIssues(selectedProjectId);
-  const storyCycleTimes = cycleTimeMetrics(issues);
+
+  const storyCycleTimes = cycleTimeMetrics(issues, start, end);
+
   console.table(storyCycleTimes);
 };
 

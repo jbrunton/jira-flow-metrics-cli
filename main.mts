@@ -1,14 +1,8 @@
 import { select } from "@inquirer/prompts";
 import { projectsMenuAction } from "./app/projects.mjs";
-
-import inquirer from "inquirer";
-import AutocompletePrompt from "inquirer-autocomplete-prompt";
-import DatePickerPrompt from "inquirer-date-prompt";
 import { db } from "./data/db.mjs";
 import { metricsMenuAction } from "./app/metrics.mjs";
-
-inquirer.registerPrompt("autocomplete", AutocompletePrompt);
-inquirer.registerPrompt("date", DatePickerPrompt);
+import "./app/prompts/register.mjs";
 
 const main = async () => {
   await db.read();

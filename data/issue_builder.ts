@@ -25,7 +25,7 @@ export class IssueBuilder {
     const status = json.fields.status.name;
     const statusCategory = json.fields.status.statusCategory
       ?.name as StatusCategory;
-    const issueType = json.fields.issueType?.name;
+    const issueType = json.fields.issuetype?.name;
     const hierarchyLevel =
       issueType === "Epic" ? HierarchyLevel.Epic : HierarchyLevel.Story;
 

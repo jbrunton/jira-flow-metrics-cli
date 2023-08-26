@@ -2,8 +2,10 @@
   "name": "jira-flow-metrics",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
+  "exports": "./main.js",
   "scripts": {
-    "start": "ts-node main.ts",
+    "start": "ts-node --esm ./main.mts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --fix",
     "lint:check": "eslint . --max-warnings 0",
@@ -29,8 +31,10 @@
     "@inquirer/prompts": "^3.0.3",
     "async": "^3.2.4",
     "cli-progress": "^3.12.0",
+    "inquirer-autocomplete-prompt": "^3.0.0",
     "jira.js": "^2.19.1",
-    "lodash": "^4.17.21",
+    "lowdb": "^6.0.1",
+    "rambda": "^8.3.0",
     "ts-node": "^10.9.1"
   }
 }

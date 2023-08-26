@@ -1,7 +1,7 @@
 import { Version3Client } from "jira.js";
-import { Issue, IssuesRepository, SearchParams } from "../domain/entities";
+import { Issue, IssuesRepository, SearchParams } from "../domain/entities.js";
 import { mapLimit } from "async";
-import { range } from "lodash";
+import { range } from "rambda";
 
 export class JiraIssuesRepository implements IssuesRepository {
   constructor(private readonly client: Version3Client) {}

@@ -22,6 +22,11 @@ export type Field = {
   name?: string;
 };
 
+export type Filter = {
+  name: string;
+  jql: string;
+};
+
 export type TransitionStatus = {
   name?: string;
   category: StatusCategory;
@@ -70,4 +75,23 @@ export interface StatusRepository {
 
 export interface FieldsRepository {
   getFields(): Promise<Field[]>;
+}
+
+export interface FiltersRepository {
+  getFilters(): Promise<Filter[]>;
+}
+
+export type Project = {
+  id: string;
+  name: string;
+  jql: string;
+  lastSynced?: Date;
+};
+
+export type CreateProjectParams = Pick<Project, "name" | "jql">;
+
+export interface ProjectsRepository {
+  getProjects(): Promise<Project[]>;
+  createProject(project: CreateProjectParams): Promise<Project>;
+  setSyncedDate(projectId: string, lastSynced: Date): Promise<Project>;
 }

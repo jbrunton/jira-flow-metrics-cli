@@ -5,11 +5,12 @@ import { LocalIssuesRepository } from "../data/local_issues_repository.mjs";
 import { cycleTimeMetrics } from "../domain/usecases/metrics/cycle_times.js";
 import { startOfDay, subDays } from "date-fns";
 import { promptInterval } from "./prompts/interval.mjs";
+import { HierarchyLevel } from "../domain/entities.js";
 
 const projectsRepository = new LocalProjectsRepository(db);
 const localIssuesRepository = new LocalIssuesRepository(db);
 
-const storyCycleTimesAction = async () => {
+const cycleTimesAction = async () => {
   const projects = await projectsRepository.getProjects();
 
   const selectedProjectId = await select({
@@ -20,6 +21,14 @@ const storyCycleTimesAction = async () => {
     })),
   });
 
+  const hierarchyLevel = await select({
+    message: "Hierarchy level",
+    choices: [
+      { name: HierarchyLevel.Story, value: HierarchyLevel.Story },
+      { name: HierarchyLevel.Epic, value: HierarchyLevel.Epic },
+    ],
+  });
+
   const now = new Date();
   const defaultEnd = subDays(startOfDay(now), 30);
 
@@ -27,7 +36,12 @@ const storyCycleTimesAction = async () => {
 
   const issues = await localIssuesRepository.getIssues(selectedProjectId);
 
-  const storyCycleTimes = cycleTimeMetrics(issues, start, end);
+  const storyCycleTimes = cycleTimeMetrics({
+    issues,
+    start,
+    end,
+    hierarchyLevel,
+  });
 
   console.table(storyCycleTimes);
 };
@@ -37,8 +51,8 @@ export const metricsMenuAction = async (): Promise<void> => {
     message: "Metrics >",
     choices: [
       {
-        name: "Story cycle times",
-        value: "story_cycle_times",
+        name: "Cycle times",
+        value: "cycle_times",
       },
       // {
       //   name: "Epic cycle times",
@@ -53,8 +67,8 @@ export const metricsMenuAction = async (): Promise<void> => {
   });
 
   switch (answer) {
-    case "story_cycle_times":
-      return storyCycleTimesAction();
+    case "cycle_times":
+      return cycleTimesAction();
     // case "epic_cycle_times":
     //   return createProjectAction();
     default:

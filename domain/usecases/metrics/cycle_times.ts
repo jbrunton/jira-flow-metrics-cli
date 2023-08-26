@@ -2,11 +2,23 @@ import { HierarchyLevel, StatusCategory } from "../../../domain/entities.js";
 import { filter, pick, map, sortBy, reverse, pipe } from "rambda";
 import { Issue } from "../../entities.js";
 
-export const cycleTimeMetrics = (issues: Issue[], start: Date, end: Date) => {
+export type CycleTimeMetricsParams = {
+  issues: Issue[];
+  start: Date;
+  end: Date;
+  hierarchyLevel: HierarchyLevel;
+};
+
+export const cycleTimeMetrics = ({
+  issues,
+  start,
+  end,
+  hierarchyLevel,
+}: CycleTimeMetricsParams) => {
   const storyCycleTimes = pipe(
     filter(
       (issue: Issue) =>
-        issue.hierarchyLevel === HierarchyLevel.Story &&
+        issue.hierarchyLevel === hierarchyLevel &&
         issue.statusCategory === StatusCategory.Done &&
         issue.cycleTime !== undefined &&
         start <= issue.completed &&

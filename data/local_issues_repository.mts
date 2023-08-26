@@ -9,7 +9,12 @@ export class LocalIssuesRepository {
   async getIssues(projectId: string): Promise<Issue[]> {
     return this.db.data.issues
       .filter((issue) => issue.projectId === projectId)
-      .map((issue) => omit(["projectId"], issue));
+      .map((issue) => omit(["projectId"], issue))
+      .map((issue) => ({
+        ...issue,
+        started: issue.started ? new Date(issue.started) : undefined,
+        completed: issue.completed ? new Date(issue.completed) : undefined,
+      }));
   }
 
   async storeIssues(projectId: string, issues: Issue[]): Promise<void> {

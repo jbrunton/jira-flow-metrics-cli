@@ -1,4 +1,5 @@
 import { select } from "@inquirer/prompts";
+import ejs from "ejs";
 import { LocalProjectsRepository } from "../data/local_projects_repository.mjs";
 import { db } from "../data/db.mjs";
 import { LocalIssuesRepository } from "../data/local_issues_repository.mjs";
@@ -6,6 +7,8 @@ import { cycleTimeMetrics } from "../domain/usecases/metrics/cycle_times.js";
 import { startOfDay, subDays } from "date-fns";
 import { promptInterval } from "./prompts/interval.mjs";
 import { HierarchyLevel } from "../domain/entities.js";
+import { existsSync, mkdirSync, writeFileSync } from "fs";
+import path from "path";
 
 const projectsRepository = new LocalProjectsRepository(db);
 const localIssuesRepository = new LocalIssuesRepository(db);
@@ -20,6 +23,10 @@ const cycleTimesAction = async () => {
       value: project.id,
     })),
   });
+
+  const selectedProject = projects.find(
+    (project) => project.id === selectedProjectId,
+  );
 
   const hierarchyLevel = await select({
     message: "Hierarchy level",
@@ -44,6 +51,38 @@ const cycleTimesAction = async () => {
   });
 
   console.table(storyCycleTimes);
+
+  const data = {
+    datasets: [
+      {
+        label: "Scatter Dataset",
+        data: storyCycleTimes.map((issue) => ({
+          x: issue.completed?.toISOString(),
+          y: issue.cycleTime,
+        })),
+        backgroundColor: "rgb(255, 99, 132)",
+      },
+    ],
+  };
+
+  const report = await ejs.renderFile("./app/templates/cycle_times.ejs.html", {
+    project: selectedProject,
+    issues: storyCycleTimes,
+    data,
+  });
+
+  const dir = path.join(
+    process.cwd(),
+    `./reports/${selectedProjectId}/${hierarchyLevel}`,
+  );
+  if (!existsSync(dir)) {
+    mkdirSync(dir, { recursive: true });
+  }
+
+  const filename = path.join(dir, "index.html");
+  writeFileSync(filename, report);
+
+  console.log(`Report generated at ${filename}`);
 };
 
 export const metricsMenuAction = async (): Promise<void> => {

@@ -3,14 +3,17 @@ import {
   Field,
   HierarchyLevel,
   Issue,
+  IssueBuilder,
   Status,
   StatusCategory,
   Transition,
 } from "../domain/entities.js";
 import { reject, isNil } from "rambda";
 
-export class IssueBuilder {
+export class JiraIssueBuilder implements IssueBuilder {
   private readonly statusCategories: { [externalId: string]: string } = {};
+  private readonly epicLinkFieldId?: string;
+  private readonly parentFieldId?: string;
 
   constructor(
     private readonly fields: Field[],
@@ -19,6 +22,24 @@ export class IssueBuilder {
     for (const status of statuses) {
       this.statusCategories[status.jiraId] = status.category;
     }
+
+    this.epicLinkFieldId = fields.find((field) => field.name === "Epic Link")
+      ?.jiraId;
+    this.parentFieldId = fields.find((field) => field.name === "Parent")
+      ?.jiraId;
+  }
+
+  getRequiredFields(): string[] {
+    return [
+      "key",
+      "summary",
+      "issuetype",
+      "status",
+      "resolution",
+      "created",
+      this.epicLinkFieldId,
+      this.parentFieldId,
+    ];
   }
 
   build(json: Version3Models.Issue) {
@@ -38,6 +59,9 @@ export class IssueBuilder {
     const completedDate = getCompletedDate(transitions);
     const cycleTime = getCycleTime(startedDate, completedDate);
 
+    const epicKey = json["fields"][this.epicLinkFieldId] as string;
+    const parentKey = json["fields"][this.parentFieldId]?.key as string;
+
     const issue: Issue = {
       key: json.key,
       summary: json.fields.summary,
@@ -45,6 +69,7 @@ export class IssueBuilder {
       hierarchyLevel,
       status,
       statusCategory,
+      parentKey: epicKey ?? parentKey,
       transitions,
       started: startedDate,
       completed: completedDate,
@@ -120,7 +145,10 @@ const getCompletedDate = (transitions: Array<Transition>): Date | undefined => {
   return lastTransition?.date;
 };
 
-const getCycleTime = (started?: Date, completed?: Date): number | undefined => {
+export const getCycleTime = (
+  started?: Date,
+  completed?: Date,
+): number | undefined => {
   if (!started || !completed) {
     return undefined;
   }

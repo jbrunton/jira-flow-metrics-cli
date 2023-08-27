@@ -10,16 +10,7 @@ export class JiraIssuesRepository implements IssuesRepository {
     const searchParams = {
       jql,
       expand: ["changelog"],
-      fields: [
-        "key",
-        "summary",
-        "issuetype",
-        "status",
-        "resolution",
-        "created",
-        // builder.epicLinkFieldId,
-        // builder.parentFieldId,
-      ],
+      fields: builder.getRequiredFields(),
     };
 
     onProgress(0, 1);

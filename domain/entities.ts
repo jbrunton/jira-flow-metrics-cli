@@ -49,13 +49,28 @@ export type Issue = {
   hierarchyLevel: HierarchyLevel;
   status?: string;
   statusCategory: StatusCategory;
+  parentKey?: string;
   started?: Date;
   completed?: Date;
   cycleTime?: number;
   transitions: Transition[];
 };
 
+export type StartedIssue = Issue & {
+  started: Date;
+};
+
+export type CompletedIssue = Issue & {
+  completed: Date;
+};
+
+export const isStarted = (issue: Issue): issue is StartedIssue =>
+  issue.started !== undefined;
+export const isCompleted = (issue: Issue): issue is CompletedIssue =>
+  issue.completed !== undefined;
+
 export interface IssueBuilder {
+  getRequiredFields(): string[];
   build(json: Version3Models.Issue): Issue;
 }
 

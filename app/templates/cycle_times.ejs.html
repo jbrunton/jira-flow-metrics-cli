@@ -1,0 +1,64 @@
+<head>
+  <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<main>
+  <body>
+    <h1><%= project.name %> - Cycle Times</h1>
+    <div style="width: 100%"><canvas id="chart"></canvas></div>
+    <table>
+      <thead>
+        <th>Key</th>
+        <th>Summary</th>
+        <th>Started</th>
+        <th>Completed</th>
+        <th>Cycle Time</th>
+      </thead>
+      <tbody>
+        <% for (const issue of issues) { %>
+        <tr>
+          <td><%= issue.key %></td>
+          <td><%= issue.summary %></td>
+          <td><%= issue.started %></td>
+          <td><%= issue.completed %></td>
+          <td><%= issue.cycleTime %></td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+
+    <script>
+      const data = <%- JSON.stringify(data, null, ' ') %>;
+
+      const issues = <%- JSON.stringify(issues, null, ' ') %>;
+
+      const label = function (ctx) {
+        const issue = issues[ctx.dataIndex];
+        return `${issue.key}: ${issue.cycleTime.toFixed(1)} days`;
+      };
+
+      const config = {
+        type: 'scatter',
+        data,
+        options: {
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label,
+              },
+            },
+          },
+          scales: {
+            x: {
+              type: 'time',
+              position: 'bottom'
+            }
+          }
+        }
+      };
+
+      new Chart(document.getElementById('chart'), config);
+    </script>
+  </body>
+</main>

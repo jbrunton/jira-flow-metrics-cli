@@ -16,7 +16,23 @@
         <th>Cycle Time</th>
       </thead>
       <tbody>
-        <% for (const issue of issues) { %>
+        <% if (outliers.length) { %>
+        <tr>
+          <th colspan="5">Outliers</th>
+        </tr>
+        <% for (const issue of outliers) { %>
+        <tr>
+          <td><%= issue.key %></td>
+          <td><%= issue.summary %></td>
+          <td><%= issue.started %></td>
+          <td><%= issue.completed %></td>
+          <td><%= issue.cycleTime %></td>
+        </tr>
+        <% } %>
+        <tr>
+          <th colspan="5">Inliers</th>
+        </tr>
+        <% } %> <% for (const issue of selectedIssues) { %>
         <tr>
           <td><%= issue.key %></td>
           <td><%= issue.summary %></td>
@@ -31,10 +47,10 @@
     <script>
       const data = <%- JSON.stringify(data, null, ' ') %>;
 
-      const issues = <%- JSON.stringify(issues, null, ' ') %>;
+      const selectedIssues = <%- JSON.stringify(selectedIssues, null, ' ') %>;
 
       const label = function (ctx) {
-        const issue = issues[ctx.dataIndex];
+        const issue = selectedIssues[ctx.dataIndex];
         return `${issue.key}: ${issue.cycleTime.toFixed(1)} days`;
       };
 

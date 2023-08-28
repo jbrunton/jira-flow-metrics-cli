@@ -12,7 +12,8 @@
   <body>
     <h1><%= project.name %> - Cycle Times</h1>
     <p><%= description %></p>
-    <div style="width: 100%"><canvas id="chart"></canvas></div>
+    <div style="width: 100%"><canvas id="scatterplot"></canvas></div>
+    <div style="width: 100%"><canvas id="histogram"></canvas></div>
     <table>
       <thead>
         <th>Key</th>
@@ -51,33 +52,48 @@
     </table>
 
     <script>
-      const data = <%- JSON.stringify(data, null, ' ') %>;
+      const scatterplot = <%- JSON.stringify(scatterplot, null, ' ') %>;
+      const histogram = <%- JSON.stringify(histogram, null, ' ') %>;
 
       const selectedIssues = <%- JSON.stringify(selectedIssues, null, ' ') %>;
 
-      const scales = <%- JSON.stringify(scales, null, ' ') %>;
+      const renderScatterplot = () => {
+        const label = function (ctx) {
+          const issue = selectedIssues[ctx.dataIndex];
+          return [`${issue.key}: ${issue.cycleTime.toFixed(1)} days`, issue.summary];
+        };
 
-      const label = function (ctx) {
-        const issue = selectedIssues[ctx.dataIndex];
-        return [`${issue.key}: ${issue.cycleTime.toFixed(1)} days`, issue.summary];
-      };
-
-      const config = {
-        type: 'scatter',
-        data,
-        options: {
-          plugins: {
-            tooltip: {
-              callbacks: {
-                label,
+        const config = {
+          type: 'scatter',
+          data: scatterplot.data,
+          options: {
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label,
+                },
               },
             },
-          },
-          scales,
-        }
+            scales: scatterplot.scales,
+          }
+        };
+
+        new Chart(document.getElementById('scatterplot'), config);
       };
 
-      new Chart(document.getElementById('chart'), config);
+      const renderHistogram = () => {
+        const histogram = <%- JSON.stringify(histogram, null, ' ') %>;
+
+        const config = {
+          type: 'bar',
+          data: histogram.data,
+        };
+
+        new Chart(document.getElementById('histogram'), config);
+      };
+
+      renderScatterplot();
+      renderHistogram();
     </script>
   </body>
 </main>

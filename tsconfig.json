@@ -2,7 +2,9 @@
   "compilerOptions": {
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "target": "ES2017"
+    "target": "ES2017",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "ts-node": {
     "transpileOnly": true,

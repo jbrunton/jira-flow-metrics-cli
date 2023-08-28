@@ -80,8 +80,8 @@ export type SearchParams = {
   builder: IssueBuilder;
 };
 
-export interface IssuesRepository {
-  search({ jql, onProgress }: SearchParams): Promise<Issue[]>;
+export abstract class IssuesRepository {
+  abstract search({ jql, onProgress }: SearchParams): Promise<Issue[]>;
 }
 
 export interface StatusRepository {

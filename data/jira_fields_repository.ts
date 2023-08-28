@@ -1,7 +1,9 @@
 import { Version3Client } from "jira.js";
 import { Field, FieldsRepository } from "../domain/entities.js";
 import { reject, isNil } from "rambda";
+import { Injectable } from "@nestjs/common";
 
+@Injectable()
 export class JiraFieldsRepository implements FieldsRepository {
   constructor(private readonly client: Version3Client) {}
 

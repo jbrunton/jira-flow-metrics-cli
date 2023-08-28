@@ -4,9 +4,10 @@ import {
   StatusCategory,
   StatusRepository,
 } from "../domain/entities.js";
-//import compact from "lodash/compact.js";
 import { reject, isNil } from "rambda";
+import { Injectable } from "@nestjs/common";
 
+@Injectable()
 export class JiraStatusRepository implements StatusRepository {
   constructor(private readonly client: Version3Client) {}
 

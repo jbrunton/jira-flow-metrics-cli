@@ -1,49 +1,20 @@
-import { select } from "@inquirer/prompts";
-import { projectsMenuAction } from "./app/projects.mjs";
-import { db } from "./data/db.mjs";
-import { metricsMenuAction } from "./app/metrics.mjs";
+import { NestFactory } from "@nestjs/core";
+import { LocalDatabase } from "./data/db.mjs";
 import "./app/prompts/register.mjs";
+import { AppModule } from "./app/app_module.js";
+import { MainMenu } from "./app/main_menu.js";
 
-const main = async () => {
+async function bootstrap() {
+  const app = await NestFactory.createApplicationContext(AppModule);
+
+  const db = await app.resolve(LocalDatabase);
   await db.read();
-  const answer = await select({
-    message: "Select an option",
-    choices: [
-      {
-        name: "Metrics",
-        value: "metrics",
-        description: "Cycle time metrics for longest stories",
-      },
-      {
-        name: "Projects",
-        value: "projects",
-      },
-      {
-        name: "Quit",
-        value: "quit",
-        description: "Exit the program",
-      },
-    ],
-  });
 
-  console.group();
+  const menu = await app.resolve(MainMenu);
+  await menu.run();
+}
 
-  if (answer === "metrics") {
-    await metricsMenuAction();
-  }
-
-  if (answer === "projects") {
-    await projectsMenuAction();
-  }
-
-  console.groupEnd();
-
-  if (answer !== "quit") {
-    await main();
-  }
-};
-
-main().catch((e) => {
+bootstrap().catch((e) => {
   console.error(e);
   process.exit(1);
 });

@@ -1,12 +1,19 @@
 import { HierarchyLevel, StatusCategory } from "../../../domain/entities.js";
-import { filter, pick, map, sortBy, reverse, pipe } from "rambda";
+import { filter, sortBy, reverse, pipe } from "rambda";
 import { Issue } from "../../entities.js";
+import { excludeOutliersFromSeq } from "../../../app/outliers.js";
 
 export type CycleTimeMetricsParams = {
   issues: Issue[];
   start: Date;
   end: Date;
   hierarchyLevel: HierarchyLevel;
+  excludeOutliers: boolean;
+};
+
+export type CycleTimeMetricsResult = {
+  selectedIssues: Issue[];
+  outliers: Issue[];
 };
 
 export const cycleTimeMetrics = ({
@@ -14,8 +21,9 @@ export const cycleTimeMetrics = ({
   start,
   end,
   hierarchyLevel,
-}: CycleTimeMetricsParams) => {
-  const storyCycleTimes = pipe(
+  excludeOutliers,
+}: CycleTimeMetricsParams): CycleTimeMetricsResult => {
+  const sortedIssues = pipe(
     filter(
       (issue: Issue) =>
         issue.hierarchyLevel === hierarchyLevel &&
@@ -24,10 +32,27 @@ export const cycleTimeMetrics = ({
         start <= issue.completed &&
         issue.completed < end,
     ),
-    map(pick(["key", "summary", "started", "completed", "cycleTime"])),
     sortBy((issue: Issue) => issue.cycleTime),
     reverse<Issue>,
   )(issues);
 
-  return storyCycleTimes;
+  if (!excludeOutliers) {
+    return {
+      selectedIssues: sortedIssues,
+      outliers: [],
+    };
+  }
+
+  const selectedIssues = excludeOutliersFromSeq(
+    sortedIssues,
+    (issue) => issue.cycleTime,
+  );
+  const outliers = sortedIssues.filter(
+    (issue) => !selectedIssues.includes(issue),
+  );
+
+  return {
+    selectedIssues,
+    outliers,
+  };
 };

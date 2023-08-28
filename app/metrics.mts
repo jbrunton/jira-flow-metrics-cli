@@ -1,4 +1,4 @@
-import { select } from "@inquirer/prompts";
+import { confirm, select } from "@inquirer/prompts";
 import ejs from "ejs";
 import { LocalProjectsRepository } from "../data/local_projects_repository.mjs";
 import { db } from "../data/db.mjs";
@@ -36,6 +36,11 @@ const cycleTimesAction = async () => {
     ],
   });
 
+  const excludeOutliers = await confirm({
+    message: "Exclude outliers?",
+    default: false,
+  });
+
   const now = new Date();
   const defaultEnd = subDays(startOfDay(now), 30);
 
@@ -43,20 +48,21 @@ const cycleTimesAction = async () => {
 
   const issues = await localIssuesRepository.getIssues(selectedProjectId);
 
-  const storyCycleTimes = cycleTimeMetrics({
+  const { selectedIssues, outliers } = cycleTimeMetrics({
     issues,
     start,
     end,
     hierarchyLevel,
+    excludeOutliers,
   });
 
-  console.table(storyCycleTimes);
+  //console.table(storyCycleTimes);
 
   const data = {
     datasets: [
       {
         label: "Scatter Dataset",
-        data: storyCycleTimes.map((issue) => ({
+        data: selectedIssues.map((issue) => ({
           x: issue.completed?.toISOString(),
           y: issue.cycleTime,
         })),
@@ -67,7 +73,8 @@ const cycleTimesAction = async () => {
 
   const report = await ejs.renderFile("./app/templates/cycle_times.ejs.html", {
     project: selectedProject,
-    issues: storyCycleTimes,
+    selectedIssues,
+    outliers,
     data,
   });
 

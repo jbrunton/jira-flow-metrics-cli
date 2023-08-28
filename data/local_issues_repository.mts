@@ -1,10 +1,11 @@
 import { Issue } from "../domain/entities.js";
-import { Low } from "lowdb";
 import { omit } from "rambda";
-import { DBData } from "./db.mjs";
+import { LocalDatabase } from "./db.mjs";
+import { Injectable } from "@nestjs/common";
 
+@Injectable()
 export class LocalIssuesRepository {
-  constructor(private readonly db: Low<DBData>) {}
+  constructor(private readonly db: LocalDatabase) {}
 
   async getIssues(projectId: string): Promise<Issue[]> {
     return this.db.data.issues

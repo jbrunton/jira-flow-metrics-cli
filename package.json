@@ -30,6 +30,8 @@
   },
   "dependencies": {
     "@inquirer/prompts": "^3.0.3",
+    "@nestjs/common": "^10.2.2",
+    "@nestjs/core": "^10.2.2",
     "async": "^3.2.4",
     "cli-progress": "^3.12.0",
     "date-fns": "^2.30.0",

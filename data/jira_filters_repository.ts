@@ -1,7 +1,9 @@
 import { Version3Client } from "jira.js";
 import { Filter, FiltersRepository } from "../domain/entities.js";
 import { reject, isNil } from "rambda";
+import { Injectable } from "@nestjs/common";
 
+@Injectable()
 export class JiraFiltersRepository implements FiltersRepository {
   constructor(private readonly client: Version3Client) {}
 

@@ -3,12 +3,13 @@ import {
   CreateProjectParams,
   ProjectsRepository,
 } from "../domain/entities.js";
-import { Low } from "lowdb";
 import crypto from "crypto";
-import { DBData } from "./db.mjs";
+import { LocalDatabase } from "./db.mjs";
+import { Injectable } from "@nestjs/common";
 
+@Injectable()
 export class LocalProjectsRepository implements ProjectsRepository {
-  constructor(private readonly db: Low<DBData>) {}
+  constructor(private readonly db: LocalDatabase) {}
 
   async getProjects(): Promise<Project[]> {
     return this.db.data.projects;

@@ -1,12 +1,15 @@
-import { HierarchyLevel, StatusCategory } from "../../../domain/entities.js";
+import {
+  HierarchyLevel,
+  Interval,
+  StatusCategory,
+} from "../../../domain/entities.js";
 import { filter, sortBy, reverse, pipe } from "rambda";
 import { Issue } from "../../entities.js";
 import { excludeOutliersFromSeq } from "../../../app/outliers.js";
 
 export type CycleTimeMetricsParams = {
   issues: Issue[];
-  start: Date;
-  end: Date;
+  interval: Interval;
   hierarchyLevel: HierarchyLevel;
   excludeOutliers: boolean;
 };
@@ -18,8 +21,7 @@ export type CycleTimeMetricsResult = {
 
 export const cycleTimeMetrics = ({
   issues,
-  start,
-  end,
+  interval: { start, end },
   hierarchyLevel,
   excludeOutliers,
 }: CycleTimeMetricsParams): CycleTimeMetricsResult => {

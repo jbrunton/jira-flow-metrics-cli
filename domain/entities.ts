@@ -110,3 +110,8 @@ export interface ProjectsRepository {
   createProject(project: CreateProjectParams): Promise<Project>;
   setSyncedDate(projectId: string, lastSynced: Date): Promise<Project>;
 }
+
+export type Interval = {
+  start: Date;
+  end: Date;
+};

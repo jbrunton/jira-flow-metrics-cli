@@ -9,6 +9,10 @@ export function excludeOutliersFromSeq<T>(
   data: T[],
   valueOf: (T) => number,
 ): T[] {
+  if (data.length === 0) {
+    return [];
+  }
+
   const values = data.map((x: T) => valueOf(x));
 
   const [q25, q75] = quantileSeq(values, [0.25, 0.75]) as [number, number];

@@ -2,10 +2,16 @@
   <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <style>
+    body {
+      grid-template-columns: 1fr min(60rem, 90%) 1fr;
+    }
+  </style>
 </head>
 <main>
   <body>
     <h1><%= project.name %> - Cycle Times</h1>
+    <p><%= description %></p>
     <div style="width: 100%"><canvas id="chart"></canvas></div>
     <table>
       <thead>
@@ -49,9 +55,11 @@
 
       const selectedIssues = <%- JSON.stringify(selectedIssues, null, ' ') %>;
 
+      const scales = <%- JSON.stringify(scales, null, ' ') %>;
+
       const label = function (ctx) {
         const issue = selectedIssues[ctx.dataIndex];
-        return `${issue.key}: ${issue.cycleTime.toFixed(1)} days`;
+        return [`${issue.key}: ${issue.cycleTime.toFixed(1)} days`, issue.summary];
       };
 
       const config = {
@@ -65,12 +73,7 @@
               },
             },
           },
-          scales: {
-            x: {
-              type: 'time',
-              position: 'bottom'
-            }
-          }
+          scales,
         }
       };
 

@@ -4,7 +4,7 @@ import { LocalProjectsRepository } from "../data/local_projects_repository.mjs";
 import { db } from "../data/db.mjs";
 import { LocalIssuesRepository } from "../data/local_issues_repository.mjs";
 import { cycleTimeMetrics } from "../domain/usecases/metrics/cycle_times.js";
-import { startOfDay, subDays } from "date-fns";
+import { differenceInMonths, startOfDay, subDays } from "date-fns";
 import { promptInterval } from "./prompts/interval.mjs";
 import { HierarchyLevel } from "../domain/entities.js";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
@@ -56,12 +56,10 @@ const cycleTimesAction = async () => {
     excludeOutliers,
   });
 
-  //console.table(storyCycleTimes);
-
   const data = {
     datasets: [
       {
-        label: "Scatter Dataset",
+        label: "Cycle Times",
         data: selectedIssues.map((issue) => ({
           x: issue.completed?.toISOString(),
           y: issue.cycleTime,
@@ -71,11 +69,32 @@ const cycleTimesAction = async () => {
     ],
   };
 
+  const unit = differenceInMonths(end, start) > 3 ? "month" : "day";
+
+  const scales = {
+    x: {
+      type: "time",
+      time: {
+        unit,
+      },
+      position: "bottom",
+      min: start,
+      max: end,
+    },
+    y: {
+      beginAtZero: true,
+    },
+  };
+
+  const description = `${hierarchyLevel} cycle times ${start.toLocaleDateString()} - ${end.toLocaleDateString()}`;
+
   const report = await ejs.renderFile("./app/templates/cycle_times.ejs.html", {
     project: selectedProject,
     selectedIssues,
     outliers,
     data,
+    scales,
+    description,
   });
 
   const dir = path.join(

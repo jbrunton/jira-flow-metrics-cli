@@ -9,6 +9,7 @@ import { promptInterval } from "./prompts/interval.mjs";
 import { HierarchyLevel } from "../domain/entities.js";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import path from "path";
+import { count, range } from "rambda";
 
 const projectsRepository = new LocalProjectsRepository(db);
 const localIssuesRepository = new LocalIssuesRepository(db);
@@ -56,33 +57,66 @@ const cycleTimesAction = async () => {
     excludeOutliers,
   });
 
-  const data = {
-    datasets: [
-      {
-        label: "Cycle Times",
-        data: selectedIssues.map((issue) => ({
-          x: issue.completed?.toISOString(),
-          y: issue.cycleTime,
-        })),
-        backgroundColor: "rgb(255, 99, 132)",
+  const scatterplot = {
+    data: {
+      datasets: [
+        {
+          label: "Cycle Times",
+          data: selectedIssues.map((issue) => ({
+            x: issue.completed?.toISOString(),
+            y: issue.cycleTime,
+          })),
+          backgroundColor: "rgb(255, 99, 132)",
+        },
+      ],
+    },
+    scales: {
+      x: {
+        type: "time",
+        time: {
+          unit: differenceInMonths(end, start) > 3 ? "month" : "day",
+        },
+        position: "bottom",
+        min: start,
+        max: end,
       },
-    ],
+      y: {
+        beginAtZero: true,
+      },
+    },
   };
 
-  const unit = differenceInMonths(end, start) > 3 ? "month" : "day";
+  const getHistogramData = () => {
+    if (selectedIssues.length === 0) {
+      return {
+        data: [],
+        buckets: [],
+      };
+    }
 
-  const scales = {
-    x: {
-      type: "time",
-      time: {
-        unit,
-      },
-      position: "bottom",
-      min: start,
-      max: end,
-    },
-    y: {
-      beginAtZero: true,
+    const maxCycleTime = Math.round(selectedIssues[0].cycleTime);
+    const buckets = range(0, maxCycleTime + 1);
+    const countItems = (days: number) =>
+      count((issue) => Math.round(issue.cycleTime) === days, selectedIssues);
+    const data = buckets.map(countItems);
+    return {
+      data,
+      buckets,
+    };
+  };
+
+  const { data, buckets } = getHistogramData();
+
+  const histogram = {
+    data: {
+      labels: buckets,
+      datasets: [
+        {
+          label: "Frequency of items",
+          data: data,
+          backgroundColor: "rgb(255, 99, 132)",
+        },
+      ],
     },
   };
 
@@ -92,9 +126,9 @@ const cycleTimesAction = async () => {
     project: selectedProject,
     selectedIssues,
     outliers,
-    data,
-    scales,
     description,
+    scatterplot,
+    histogram,
   });
 
   const dir = path.join(

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { CycleTimesAction } from "./actions/cycle_times_menu.mjs";
+import { CycleTimesAction } from "./actions/cycle_times.mjs";
 import { select } from "@inquirer/prompts";
 
 @Injectable()

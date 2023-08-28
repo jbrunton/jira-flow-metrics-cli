@@ -1,9 +1,5 @@
 import inquirer from "inquirer";
-
-export type Interval = {
-  start: Date;
-  end: Date;
-};
+import { Interval } from "../../domain/entities.js";
 
 export const promptInterval = async (
   defaultStart: Date,

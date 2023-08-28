@@ -115,3 +115,5 @@ export type Interval = {
   start: Date;
   end: Date;
 };
+
+export type TimeUnit = "day" | "week" | "month";

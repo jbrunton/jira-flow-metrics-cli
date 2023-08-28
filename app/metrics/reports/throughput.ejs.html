@@ -1,0 +1,48 @@
+<head>
+  <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <style>
+    body {
+      grid-template-columns: 1fr min(60rem, 90%) 1fr;
+    }
+  </style>
+</head>
+<main>
+  <body>
+    <h1><%= project.name %> - Throughput</h1>
+    <p><%= description %></p>
+    <div style="width: 100%"><canvas id="throughput"></canvas></div>
+    <table>
+      <thead>
+        <th>Date</th>
+        <th>Count</th>
+      </thead>
+      <tbody>
+        <% for (const row of throughputData) { %>
+        <tr>
+          <td><%= row.date %></td>
+          <td><%= row.count %></td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+    <script>
+      const renderThroughput = () => {
+        const throughputChart = <%- JSON.stringify(throughputChart, null, ' ') %>;
+
+        const config = {
+          type: 'line',
+          data: throughputChart.data,
+          options: {
+            scales: throughputChart.scales
+          }
+        };
+
+        new Chart(document.getElementById('throughput'), config);
+      };
+
+      renderThroughput();
+    </script>
+  </body>
+</main>

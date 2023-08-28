@@ -1,19 +1,19 @@
 import { Injectable } from "@nestjs/common";
 import { LocalProjectsRepository } from "../../../data/local_projects_repository.mjs";
 import { LocalIssuesRepository } from "../../../data/local_issues_repository.mjs";
-import { confirm, select } from "@inquirer/prompts";
+import { select } from "@inquirer/prompts";
 import { HierarchyLevel } from "../../../domain/entities.js";
 import { startOfDay, subDays } from "date-fns";
 import { promptInterval } from "../../prompts/interval.mjs";
-import { cycleTimeMetrics } from "../../../domain/usecases/metrics/cycle_times.js";
 import ejs from "ejs";
 import path, { join } from "path";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
-import { buildHistogram } from "../charts/histogram.mjs";
-import { buildScatterplot } from "../charts/scatterplot.mjs";
+import { calculateThroughput } from "../../../domain/usecases/metrics/throughput.js";
+import { buildThroughputChart } from "../charts/throughput.mjs";
+import { promptTimeUnit } from "../../prompts/time_unit.mjs";
 
 @Injectable()
-export class CycleTimesAction {
+export class ThroughputAction {
   constructor(
     private readonly projectsRepository: LocalProjectsRepository,
     private readonly issuesRepository: LocalIssuesRepository,
@@ -42,10 +42,7 @@ export class CycleTimesAction {
       ],
     });
 
-    const excludeOutliers = await confirm({
-      message: "Exclude outliers?",
-      default: false,
-    });
+    const timeUnit = await promptTimeUnit();
 
     const now = new Date();
     const defaultStart = subDays(startOfDay(now), 30);
@@ -53,27 +50,26 @@ export class CycleTimesAction {
 
     const issues = await this.issuesRepository.getIssues(selectedProjectId);
 
-    const { selectedIssues, outliers } = cycleTimeMetrics({
+    const throughputData = calculateThroughput({
       issues,
       interval,
       hierarchyLevel,
-      excludeOutliers,
+      timeUnit,
     });
 
-    const scatterplot = buildScatterplot(interval, selectedIssues);
-    const histogram = buildHistogram(selectedIssues);
+    console.info(throughputData);
 
-    const description = `${hierarchyLevel} cycle times ${interval.start.toLocaleDateString()} - ${interval.end.toLocaleDateString()}`;
+    const description = `${hierarchyLevel} throughput ${interval.start.toLocaleDateString()} - ${interval.end.toLocaleDateString()}`;
+
+    const throughputChart = buildThroughputChart(timeUnit, throughputData);
 
     const report = await ejs.renderFile(
-      "./app/metrics/reports/cycle_times.ejs.html",
+      "./app/metrics/reports/throughput.ejs.html",
       {
         project: selectedProject,
-        selectedIssues,
-        outliers,
         description,
-        scatterplot,
-        histogram,
+        throughputData,
+        throughputChart,
       },
     );
 
@@ -85,9 +81,46 @@ export class CycleTimesAction {
       mkdirSync(dir, { recursive: true });
     }
 
-    const filename = path.join(dir, "index.html");
+    const filename = path.join(dir, "throughput.html");
     writeFileSync(filename, report);
 
     console.log(`Report generated at ${filename}`);
+
+    // const { selectedIssues, outliers } = cycleTimeMetrics({
+    //   issues,
+    //   interval,
+    //   hierarchyLevel,
+    //   excludeOutliers,
+    // });
+
+    // const scatterplot = buildScatterplot(interval, selectedIssues);
+    // const histogram = buildHistogram(selectedIssues);
+
+    // const description = `${hierarchyLevel} cycle times ${interval.start.toLocaleDateString()} - ${interval.end.toLocaleDateString()}`;
+
+    // const report = await ejs.renderFile(
+    //   "./app/templates/cycle_times.ejs.html",
+    //   {
+    //     project: selectedProject,
+    //     selectedIssues,
+    //     outliers,
+    //     description,
+    //     scatterplot,
+    //     histogram,
+    //   },
+    // );
+
+    // const dir = join(
+    //   process.cwd(),
+    //   `./reports/${selectedProjectId}/${hierarchyLevel}`,
+    // );
+    // if (!existsSync(dir)) {
+    //   mkdirSync(dir, { recursive: true });
+    // }
+
+    // const filename = path.join(dir, "index.html");
+    // writeFileSync(filename, report);
+
+    // console.log(`Report generated at ${filename}`);
   }
 }

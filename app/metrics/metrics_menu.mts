@@ -1,10 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { CycleTimesAction } from "./actions/cycle_times.mjs";
 import { select } from "@inquirer/prompts";
+import { ThroughputAction } from "./actions/throughput.mjs";
 
 @Injectable()
 export class MetricsMenu {
-  constructor(private readonly cycleTimesAction: CycleTimesAction) {}
+  constructor(
+    private readonly cycleTimesAction: CycleTimesAction,
+    private readonly throughputAction: ThroughputAction,
+  ) {}
 
   async run() {
     const answer = await select({
@@ -13,6 +17,10 @@ export class MetricsMenu {
         {
           name: "Cycle times",
           value: "cycle_times",
+        },
+        {
+          name: "Throughput",
+          value: "throughput",
         },
         {
           name: "Back",
@@ -25,6 +33,8 @@ export class MetricsMenu {
     switch (answer) {
       case "cycle_times":
         return this.cycleTimesAction.run();
+      case "throughput":
+        return this.throughputAction.run();
       default:
         return Promise.resolve();
     }

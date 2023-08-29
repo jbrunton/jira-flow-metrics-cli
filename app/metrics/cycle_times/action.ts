@@ -1,55 +1,49 @@
 import { Injectable } from "@nestjs/common";
 import { LocalProjectsRepository } from "../../../data/local_projects_repository.mjs";
 import { LocalIssuesRepository } from "../../../data/local_issues_repository.mjs";
-import { confirm, select } from "@inquirer/prompts";
-import { HierarchyLevel } from "../../../domain/entities.js";
-import { startOfDay, subDays } from "date-fns";
-import { promptInterval } from "../../prompts/interval.mjs";
+import { HierarchyLevel, Interval } from "../../../domain/entities.js";
 import { cycleTimeMetrics } from "../../../domain/usecases/metrics/cycle_times.js";
 import ejs from "ejs";
 import path, { join } from "path";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { buildHistogram } from "../charts/histogram.mjs";
 import { buildScatterplot } from "../charts/scatterplot.mjs";
+import { Action } from "../../lib/action.js";
+
+export type CycleTimesReportArgs = {
+  selectedProjectId: string;
+  interval: Interval;
+  excludeOutliers: boolean;
+  hierarchyLevel: HierarchyLevel;
+};
+
+export type CycleTimesReportResult = {
+  reportPath: string;
+};
 
 @Injectable()
-export class CycleTimesAction {
+export class CycleTimesReportAction extends Action<
+  CycleTimesReportArgs,
+  CycleTimesReportResult
+> {
   constructor(
     private readonly projectsRepository: LocalProjectsRepository,
     private readonly issuesRepository: LocalIssuesRepository,
-  ) {}
+  ) {
+    super("cycle times report");
+  }
 
-  async run() {
+  async run({
+    selectedProjectId,
+    excludeOutliers,
+    interval,
+    hierarchyLevel,
+  }: CycleTimesReportArgs): Promise<CycleTimesReportResult> {
     const projects = await this.projectsRepository.getProjects();
-
-    const selectedProjectId = await select({
-      message: "Choose project",
-      choices: projects.map((project) => ({
-        name: project.name,
-        value: project.id,
-      })),
-    });
 
     const selectedProject = projects.find(
       (project) => project.id === selectedProjectId,
     );
-
-    const hierarchyLevel = await select({
-      message: "Hierarchy level",
-      choices: [
-        { name: HierarchyLevel.Story, value: HierarchyLevel.Story },
-        { name: HierarchyLevel.Epic, value: HierarchyLevel.Epic },
-      ],
-    });
-
-    const excludeOutliers = await confirm({
-      message: "Exclude outliers?",
-      default: false,
-    });
-
-    const now = new Date();
-    const defaultStart = subDays(startOfDay(now), 30);
-    const interval = await promptInterval(defaultStart, now);
 
     const issues = await this.issuesRepository.getIssues(selectedProjectId);
 
@@ -66,7 +60,7 @@ export class CycleTimesAction {
     const description = `${hierarchyLevel} cycle times ${interval.start.toLocaleDateString()} - ${interval.end.toLocaleDateString()}`;
 
     const report = await ejs.renderFile(
-      "./app/metrics/reports/cycle_times.ejs.html",
+      "./app/metrics/cycle_times/report.ejs.html",
       {
         project: selectedProject,
         selectedIssues,
@@ -85,9 +79,9 @@ export class CycleTimesAction {
       mkdirSync(dir, { recursive: true });
     }
 
-    const filename = path.join(dir, "index.html");
-    writeFileSync(filename, report);
+    const reportPath = path.join(dir, "index.html");
+    writeFileSync(reportPath, report);
 
-    console.log(`Report generated at ${filename}`);
+    return { reportPath };
   }
 }

@@ -67,8 +67,6 @@ export const calculateThroughput = ({
     }),
   );
 
-  console.log({ timeUnit, intervals });
-
   const result = intervals.map(({ start, end }) => {
     const itemsCount = count(
       (issue: Issue) =>
@@ -83,6 +81,4 @@ export const calculateThroughput = ({
   });
 
   return result;
-
-  //console.info(JSON.stringify({ intervals }, null, ' '));
 };

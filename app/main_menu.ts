@@ -31,8 +31,6 @@ export class MainMenu {
       ],
     });
 
-    console.group();
-
     if (answer === "metrics") {
       await this.metricsMenu.run();
     }
@@ -40,8 +38,6 @@ export class MainMenu {
     if (answer === "projects") {
       await this.projectsMenu.run();
     }
-
-    console.groupEnd();
 
     if (answer !== "quit") {
       await this.run();

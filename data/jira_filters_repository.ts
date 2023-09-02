@@ -14,7 +14,6 @@ export class JiraFiltersRepository implements FiltersRepository {
     });
     return reject(isNil)(
       firstPage.values.map((filter) => {
-        //console.log({ filter })
         return {
           name: filter.name,
           jql: filter.jql,

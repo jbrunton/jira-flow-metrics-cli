@@ -1,5 +1,5 @@
 import inquirer from "inquirer";
-import { Interval } from "../../domain/entities.js";
+import { Interval } from "../../../domain/entities.js";
 
 export const promptInterval = async (
   defaultStart: Date,

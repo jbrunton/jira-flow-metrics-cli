@@ -1,13 +1,13 @@
 import { Injectable } from "@nestjs/common";
-import { CycleTimesAction } from "./actions/cycle_times.mjs";
 import { select } from "@inquirer/prompts";
-import { ThroughputAction } from "./actions/throughput.mjs";
+import { CycleTimesMenuItem } from "./cycle_times/menu.js";
+import { ThroughputMenuItem } from "./throughput/menu.js";
 
 @Injectable()
 export class MetricsMenu {
   constructor(
-    private readonly cycleTimesAction: CycleTimesAction,
-    private readonly throughputAction: ThroughputAction,
+    private readonly cycleTimesMenu: CycleTimesMenuItem,
+    private readonly throughputMenu: ThroughputMenuItem,
   ) {}
 
   async run() {
@@ -32,9 +32,9 @@ export class MetricsMenu {
 
     switch (answer) {
       case "cycle_times":
-        return this.cycleTimesAction.run();
+        return this.cycleTimesMenu.run();
       case "throughput":
-        return this.throughputAction.run();
+        return this.throughputMenu.run();
       default:
         return Promise.resolve();
     }

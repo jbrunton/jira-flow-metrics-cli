@@ -1,5 +1,5 @@
 import { select } from "@inquirer/prompts";
-import { TimeUnit } from "../../domain/entities.js";
+import { TimeUnit } from "../../../domain/entities.js";
 
 export const promptTimeUnit = async (): Promise<TimeUnit> => {
   const timeUnit = await select({

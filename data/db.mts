@@ -18,7 +18,6 @@ export class LocalDatabase extends Low<DBData> {
   constructor() {
     const defaultData: DBData = { projects: [], issues: [] };
     const path = join(process.cwd(), "db.json");
-    console.info("local database path:", path);
     const adapter = new JSONFile<DBData>(path);
     super(adapter, defaultData);
   }

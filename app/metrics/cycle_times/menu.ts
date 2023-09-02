@@ -4,24 +4,26 @@ import { confirm, select } from "@inquirer/prompts";
 import { HierarchyLevel } from "../../../domain/entities.js";
 import { startOfDay, subDays } from "date-fns";
 import { promptInterval } from "../../lib/prompts/interval.mjs";
-import { MenuItem } from "../../lib/menu_item.js";
-import {
-  CycleTimesReportAction,
-  CycleTimesReportArgs,
-  CycleTimesReportResult,
-} from "./action.js";
-import { logger } from "../../lib/action_logger.js";
+import { CycleTimesReportAction, CycleTimesReportArgs } from "./action.js";
+import { logger } from "../../lib/actions/logger.js";
+import { run } from "../../lib/actions/run.js";
+import { MenuItem } from "../../lib/menus/types.js";
 
 @Injectable()
-export class CycleTimesMenuItem extends MenuItem<
-  CycleTimesReportArgs,
-  CycleTimesReportResult
-> {
+export class CycleTimesMenuItem implements MenuItem {
+  readonly name = "Cycle times";
+
   constructor(
     private readonly projectsRepository: LocalProjectsRepository,
-    action: CycleTimesReportAction,
-  ) {
-    super(action);
+    private readonly action: CycleTimesReportAction,
+  ) {}
+
+  async run(): Promise<void> {
+    const args = await this.readArgs();
+    const { reportPath } = await run("Generating cycle time report", () =>
+      this.action.run(args),
+    );
+    logger.info(`Report path: ${reportPath}`);
   }
 
   protected async readArgs(): Promise<CycleTimesReportArgs> {
@@ -58,9 +60,5 @@ export class CycleTimesMenuItem extends MenuItem<
       hierarchyLevel,
       interval,
     };
-  }
-
-  onSuccess({ reportPath }: CycleTimesReportResult): void {
-    logger.info(`Report path: ${reportPath}`);
   }
 }

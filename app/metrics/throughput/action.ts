@@ -11,7 +11,6 @@ import path, { join } from "path";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { calculateThroughput } from "../../../domain/usecases/metrics/throughput.js";
 import { buildThroughputChart } from "../charts/throughput.mjs";
-import { Action } from "../../lib/action.js";
 
 export type ThroughputReportActionArgs = {
   selectedProjectId: string;
@@ -25,16 +24,11 @@ export type ThroughputReportActionResult = {
 };
 
 @Injectable()
-export class ThroughputReportAction extends Action<
-  ThroughputReportActionArgs,
-  ThroughputReportActionResult
-> {
+export class ThroughputReportAction {
   constructor(
     private readonly projectsRepository: LocalProjectsRepository,
     private readonly issuesRepository: LocalIssuesRepository,
-  ) {
-    super("throughput report action");
-  }
+  ) {}
 
   async run({
     selectedProjectId,

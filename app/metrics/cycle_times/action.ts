@@ -8,7 +8,6 @@ import path, { join } from "path";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { buildHistogram } from "../charts/histogram.mjs";
 import { buildScatterplot } from "../charts/scatterplot.mjs";
-import { Action } from "../../lib/action.js";
 
 export type CycleTimesReportArgs = {
   selectedProjectId: string;
@@ -22,16 +21,11 @@ export type CycleTimesReportResult = {
 };
 
 @Injectable()
-export class CycleTimesReportAction extends Action<
-  CycleTimesReportArgs,
-  CycleTimesReportResult
-> {
+export class CycleTimesReportAction {
   constructor(
     private readonly projectsRepository: LocalProjectsRepository,
     private readonly issuesRepository: LocalIssuesRepository,
-  ) {
-    super("cycle times report");
-  }
+  ) {}
 
   async run({
     selectedProjectId,

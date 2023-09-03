@@ -5,16 +5,11 @@
       "id": "tuukdwbl15cYogPsF_sRdA",
       "name": "Metrics",
       "jql": "project = MET ORDER BY Rank ASC"
-    }
-  ],
-  "reports": [
-    {
-      "projectId": "tuukdwbl15cYogPsF_sRdA",
-      "type": "cycle_times"
     },
     {
-      "projectId": "tuukdwbl15cYogPsF_sRdA",
-      "type": "throughput"
+      "id": "NFEO5N9e5ISef9gGSSU04Q",
+      "name": "LIST",
+      "jql": "project = LIST ORDER BY Rank ASC"
     }
   ]
 }

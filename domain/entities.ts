@@ -111,13 +111,6 @@ export interface ProjectsRepository {
   setSyncedDate(projectId: string, lastSynced: Date): Promise<Project>;
 }
 
-export type Interval = {
-  start: Date;
-  end: Date;
-};
-
-export type TimeUnit = "day" | "week" | "month";
-
 export type DashboardReport = {
   projectId: string;
   type: string;
@@ -126,7 +119,6 @@ export type DashboardReport = {
 export type DashboardDefinition = {
   name: string;
   projects: Omit<Project, "lastSynced">[];
-  reports: DashboardReport[];
 };
 
 export type Dashboard = {

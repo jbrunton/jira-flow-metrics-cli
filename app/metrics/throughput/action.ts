@@ -1,16 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { LocalProjectsRepository } from "../../../data/local_projects_repository.mjs";
 import { LocalIssuesRepository } from "../../../data/local_issues_repository.mjs";
-import {
-  HierarchyLevel,
-  Interval,
-  TimeUnit,
-} from "../../../domain/entities.js";
+import { HierarchyLevel } from "../../../domain/entities.js";
 import ejs from "ejs";
 import path, { join } from "path";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { calculateThroughput } from "../../../domain/usecases/metrics/throughput.js";
 import { buildThroughputChart } from "../charts/throughput.mjs";
+import { Interval, TimeUnit } from "../../../domain/intervals.mjs";
 
 export type ThroughputReportActionArgs = {
   selectedProjectId: string;

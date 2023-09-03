@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { LocalProjectsRepository } from "../../../data/local_projects_repository.mjs";
-import { checkbox } from "@inquirer/prompts";
 import { run } from "../../lib/actions/run.js";
 import { SyncProjectAction } from "../actions/sync.mjs";
 import { MenuItem } from "../../lib/menus/types.js";
 import { zip } from "rambda";
 import padEnd from "lodash/padEnd.js";
+import { selectProjects } from "../../lib/prompts/projects.mjs";
 
 @Injectable()
 export class SyncProjectMenuItem implements MenuItem {
@@ -17,9 +17,10 @@ export class SyncProjectMenuItem implements MenuItem {
   ) {}
 
   async run(): Promise<void> {
-    const { projectIds } = await this.readArgs();
-
     const projects = await this.projectsRepository.getProjects();
+
+    const projectIds = await selectProjects(projects);
+
     const selectedProjects = projects.filter((project) =>
       projectIds.includes(project.id),
     );
@@ -34,20 +35,5 @@ export class SyncProjectMenuItem implements MenuItem {
         this.action.run({ project }, onUpdate),
       );
     }
-  }
-
-  protected async readArgs(): Promise<{ projectIds: string[] }> {
-    const projects = await this.projectsRepository.getProjects();
-
-    const projectIds = await checkbox({
-      message: "Choose projects",
-      choices: projects.map((project) => ({
-        name: project.name,
-        value: project.id,
-        checked: true,
-      })),
-    });
-
-    return { projectIds };
   }
 }

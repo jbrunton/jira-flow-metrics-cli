@@ -1,19 +1,22 @@
 import { Injectable } from "@nestjs/common";
 import { MenuFactory } from "../lib/menus/factory.js";
 import { ListDashboardsMenuItem } from "./menus/list.mjs";
-import { CreateDashboardMenuItem } from "./menus/create.mjs";
+import { AddDashboardMenuItem } from "./menus/add.mjs";
 import { SyncDashboardMenuItem } from "./menus/sync.mjs";
+import { CreateDashboardMenuItem } from "./menus/create.mjs";
 
 @Injectable()
 export class DashboardMenu extends MenuFactory {
   constructor(
     listDashboardsMenuItem: ListDashboardsMenuItem,
-    createDashboardsMenuItem: CreateDashboardMenuItem,
+    createDashboardMenuItem: CreateDashboardMenuItem,
+    addDashboardMenuItem: AddDashboardMenuItem,
     syncDashboardMenuItem: SyncDashboardMenuItem,
   ) {
     super("Dashboards", [
       listDashboardsMenuItem,
-      createDashboardsMenuItem,
+      createDashboardMenuItem,
+      addDashboardMenuItem,
       syncDashboardMenuItem,
     ]);
   }

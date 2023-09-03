@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { LocalProjectsRepository } from "../../../data/local_projects_repository.mjs";
 import { LocalIssuesRepository } from "../../../data/local_issues_repository.mjs";
-import { HierarchyLevel, Interval } from "../../../domain/entities.js";
+import { HierarchyLevel } from "../../../domain/entities.js";
 import { cycleTimeMetrics } from "../../../domain/usecases/metrics/cycle_times.js";
 import ejs from "ejs";
 import path, { join } from "path";
@@ -9,6 +9,7 @@ import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { buildHistogram } from "../charts/histogram.mjs";
 import { buildScatterplot } from "../charts/scatterplot.mjs";
 import { format } from "date-fns";
+import { Interval } from "../../../domain/intervals.mjs";
 
 export type CycleTimesReportArgs = {
   selectedProjectId: string;

@@ -6,12 +6,18 @@ import { LocalProjectsRepository } from "../../../data/local_projects_repository
 import { select } from "@inquirer/prompts";
 import { CreateProjectAction } from "../../projects/actions/create.mjs";
 import { run } from "../../lib/actions/run.js";
-import { Dashboard, HierarchyLevel } from "../../../domain/entities.js";
+import {
+  Dashboard,
+  HierarchyLevel,
+  Project,
+} from "../../../domain/entities.js";
 import { zip } from "rambda";
 import padEnd from "lodash/padEnd.js";
 import { CycleTimesReportAction } from "../../metrics/cycle_times/action.js";
-import { endOfDay, startOfDay, subDays } from "date-fns";
-import { logger } from "../../lib/actions/logger.js";
+import { TimeUnit, getRelativeInterval } from "../../../domain/intervals.mjs";
+import ejs from "ejs";
+import { join } from "path";
+import { existsSync, mkdirSync, writeFileSync } from "fs";
 
 @Injectable()
 export class SyncDashboardMenuItem implements MenuItem {
@@ -55,30 +61,52 @@ export class SyncDashboardMenuItem implements MenuItem {
     }
   }
 
-  private async createMetrics(dashboard: Dashboard) {
+  private async createMetrics(
+    dashboard: Dashboard,
+  ): Promise<{ reportPath: string }> {
     const dashboardProjects = dashboard.definition.projects;
     const now = new Date();
 
+    const reports: { project: Project; name: string; path: string }[] = [];
+
     for (const project of dashboardProjects) {
-      const start = subDays(startOfDay(now), 30);
-      const end = endOfDay(now);
       await run(`Generating story cycle times report for ${project.name}`, () =>
         this.cycleTimesReport.run({
           selectedProjectId: project.id,
           hierarchyLevel: HierarchyLevel.Story,
-          interval: { start, end },
+          interval: getRelativeInterval(now, 30, TimeUnit.Day),
           excludeOutliers: false,
         }),
-      ).then(({ reportPath }) => logger.info(`Report: ${reportPath}`));
+      ).then(({ reportPath }) => {
+        reports.push({ project, name: "story cycle times", path: reportPath });
+      });
+
       await run(`Generating epic cycle times report for ${project.name}`, () =>
         this.cycleTimesReport.run({
           selectedProjectId: project.id,
           hierarchyLevel: HierarchyLevel.Epic,
-          interval: { start, end },
+          interval: getRelativeInterval(now, 3, TimeUnit.Month),
           excludeOutliers: false,
         }),
-      ).then(({ reportPath }) => logger.info(`Report: ${reportPath}`));
+      ).then(({ reportPath }) => {
+        reports.push({ project, name: "epic cycle times", path: reportPath });
+      });
     }
+
+    const report = await ejs.renderFile("./app/dashboards/report.ejs.html", {
+      dashboard,
+      reports,
+    });
+
+    const dir = join(process.cwd(), `./reports/${dashboard.id}/`);
+    if (!existsSync(dir)) {
+      mkdirSync(dir, { recursive: true });
+    }
+
+    const reportPath = join(dir, "index.html");
+    writeFileSync(reportPath, report);
+
+    return { reportPath };
   }
 
   async run(): Promise<void> {
@@ -91,7 +119,8 @@ export class SyncDashboardMenuItem implements MenuItem {
 
     await this.createProjects(dashboard);
     await this.syncProjects(dashboard);
-    await this.createMetrics(dashboard);
+    const { reportPath } = await this.createMetrics(dashboard);
+    console.info(`Report generated at ${reportPath}`);
   }
 
   protected async readArgs(): Promise<{ dashboardId: string }> {

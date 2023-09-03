@@ -103,7 +103,7 @@ export type Project = {
   lastSynced?: Date;
 };
 
-export type CreateProjectParams = Pick<Project, "name" | "jql">;
+export type CreateProjectParams = Pick<Project, "id" | "name" | "jql">;
 
 export interface ProjectsRepository {
   getProjects(): Promise<Project[]>;
@@ -117,3 +117,25 @@ export type Interval = {
 };
 
 export type TimeUnit = "day" | "week" | "month";
+
+export type DashboardReport = {
+  projectId: string;
+  type: string;
+};
+
+export type DashboardDefinition = {
+  name: string;
+  projects: Omit<Project, "lastSynced">[];
+  reports: DashboardReport[];
+};
+
+export type Dashboard = {
+  id: string;
+  definition: DashboardDefinition;
+  url?: string;
+};
+
+export interface DashboardsRepository {
+  getDashboards(): Promise<Dashboard[]>;
+  createDashboard(dashboard: Dashboard): Promise<Dashboard>;
+}

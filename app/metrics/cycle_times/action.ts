@@ -8,6 +8,7 @@ import path, { join } from "path";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { buildHistogram } from "../charts/histogram.mjs";
 import { buildScatterplot } from "../charts/scatterplot.mjs";
+import { format } from "date-fns";
 
 export type CycleTimesReportArgs = {
   selectedProjectId: string;
@@ -67,7 +68,10 @@ export class CycleTimesReportAction {
 
     const dir = join(
       process.cwd(),
-      `./reports/${selectedProjectId}/${hierarchyLevel}`,
+      `./reports/${selectedProjectId}/${hierarchyLevel}/${format(
+        interval.start,
+        "yyyy-MM-dd",
+      )}-${format(interval.end, "yyyy-MM-dd")}`,
     );
     if (!existsSync(dir)) {
       mkdirSync(dir, { recursive: true });

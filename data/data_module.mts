@@ -8,6 +8,7 @@ import { JiraStatusRepository } from "./jira_status_repository.js";
 import { JiraFiltersRepository } from "./jira_filters_repository.js";
 import { Version3Client } from "jira.js";
 import { client } from "./client.js";
+import { LocalDashboardsRepository } from "./local_dashboards_repository.mjs";
 
 @Global()
 @Module({
@@ -15,6 +16,7 @@ import { client } from "./client.js";
     LocalDatabase,
     LocalIssuesRepository,
     LocalProjectsRepository,
+    LocalDashboardsRepository,
     JiraIssuesRepository,
     JiraFieldsRepository,
     JiraStatusRepository,
@@ -28,6 +30,7 @@ import { client } from "./client.js";
     LocalDatabase,
     LocalIssuesRepository,
     LocalProjectsRepository,
+    LocalDashboardsRepository,
     JiraIssuesRepository,
     JiraFieldsRepository,
     JiraStatusRepository,

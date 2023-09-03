@@ -2,12 +2,14 @@ import { select } from "@inquirer/prompts";
 import { Injectable } from "@nestjs/common";
 import { MetricsMenu } from "./metrics/metrics_menu.mjs";
 import { ProjectMenu } from "./projects/projects_menu.mjs";
+import { DashboardMenu } from "./dashboards/dashboards_menu.mjs";
 
 @Injectable()
 export class MainMenu {
   constructor(
     private readonly metricsMenu: MetricsMenu,
     private readonly projectsMenu: ProjectMenu,
+    private readonly dashboardsMenu: DashboardMenu,
   ) {}
 
   async run() {
@@ -24,6 +26,10 @@ export class MainMenu {
           value: "projects",
         },
         {
+          name: "Dashboards",
+          value: "dashboards",
+        },
+        {
           name: "Quit",
           value: "quit",
           description: "Exit the program",
@@ -37,6 +43,10 @@ export class MainMenu {
 
     if (answer === "projects") {
       await this.projectsMenu.run();
+    }
+
+    if (answer === "dashboards") {
+      await this.dashboardsMenu.run();
     }
 
     if (answer !== "quit") {

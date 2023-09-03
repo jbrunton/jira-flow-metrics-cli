@@ -3,7 +3,6 @@ import {
   CreateProjectParams,
   ProjectsRepository,
 } from "../domain/entities.js";
-import crypto from "crypto";
 import { LocalDatabase } from "./db.mjs";
 import { Injectable } from "@nestjs/common";
 
@@ -16,15 +15,11 @@ export class LocalProjectsRepository implements ProjectsRepository {
   }
 
   async createProject(params: CreateProjectParams) {
-    const project: Project = {
-      id: crypto.randomUUID(),
-      ...params,
-    };
-    this.db.data.projects.push(project);
+    this.db.data.projects.push(params);
 
     await this.db.write();
 
-    return project;
+    return params;
   }
 
   async setSyncedDate(projectId: string, lastSynced: Date): Promise<Project> {

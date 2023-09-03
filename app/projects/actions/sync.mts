@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import * as cliProgress from "cli-progress";
 import {
   HierarchyLevel,
   Issue,
@@ -8,7 +7,6 @@ import {
   isCompleted,
   isStarted,
 } from "../../../domain/entities.js";
-import { checkbox } from "@inquirer/prompts";
 import { map, pipe, pluck, sort } from "rambda";
 import { compareAsc, compareDesc } from "date-fns";
 import {
@@ -20,9 +18,15 @@ import { JiraStatusRepository } from "../../../data/jira_status_repository.js";
 import { JiraIssuesRepository } from "../../../data/jira_issues_repository.js";
 import { LocalIssuesRepository } from "../../../data/local_issues_repository.mjs";
 import { LocalProjectsRepository } from "../../../data/local_projects_repository.mjs";
+import padStart from "lodash/padStart.js";
+import chalk from "chalk";
+
+export type SyncProjectActionArgs = {
+  project: Project;
+};
 
 @Injectable()
-export class SyncProjectsAction {
+export class SyncProjectAction {
   constructor(
     private readonly projectsRepository: LocalProjectsRepository,
     private readonly fieldsRepository: JiraFieldsRepository,
@@ -31,33 +35,14 @@ export class SyncProjectsAction {
     private readonly localIssuesRepository: LocalIssuesRepository,
   ) {}
 
-  async run() {
-    const projects = await this.projectsRepository.getProjects();
-
-    const selectedProjectIds = await checkbox({
-      message: "Choose projects",
-      choices: projects.map((project) => ({
-        name: project.name,
-        value: project.id,
-        checked: true,
-      })),
-    });
-
-    for (const projectId of selectedProjectIds) {
-      const project = projects.find((project) => project.id === projectId);
-      await this.syncProject(project);
-    }
+  async run({ project }: SyncProjectActionArgs, onUpdate) {
+    await this.syncProject(project, onUpdate);
   }
 
-  private async syncProject(project: Project) {
-    console.info(`Syncing project ${project.name}`);
-
-    const progressBar = new cliProgress.SingleBar(
-      {},
-      cliProgress.Presets.shades_classic,
-    );
-    progressBar.start(1, 0);
-
+  private async syncProject(
+    project: Project,
+    onUpdate: (text: string) => void,
+  ) {
     const [fields, statuses] = await Promise.all([
       this.fieldsRepository.getFields(),
       this.statusRepository.getStatuses(),
@@ -68,22 +53,18 @@ export class SyncProjectsAction {
     const issues = await this.issuesRepository.search({
       jql: project.jql,
       onProgress: (pageIndex, totalPages) => {
-        progressBar.setTotal(totalPages);
-        progressBar.update(pageIndex);
+        const progress = Math.round((100 * pageIndex) / totalPages);
+        onUpdate(chalk.bold(padStart(`${progress}%`, 4)));
       },
       builder,
     });
-    progressBar.stop();
+    onUpdate(`${chalk.bold("100%")}  ${issues.length} issues synced`);
 
     const estimatedIssues = estimateEpicCycleTimes(issues);
 
     this.localIssuesRepository.storeIssues(project.id, estimatedIssues);
 
     await this.projectsRepository.setSyncedDate(project.id, new Date());
-
-    console.info(
-      `Synced project ${project.name} (${estimatedIssues.length} issues)`,
-    );
   }
 }
 

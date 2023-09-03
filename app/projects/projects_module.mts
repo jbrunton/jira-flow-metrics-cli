@@ -1,14 +1,16 @@
 import { Module } from "@nestjs/common";
-import { CreateProjectAction } from "./actions/create.mjs";
-import { ListProjectsAction } from "./actions/list.mjs";
-import { SyncProjectsAction } from "./actions/sync.mjs";
+import { SyncProjectAction } from "./actions/sync.mjs";
 import { ProjectMenu } from "./projects_menu.mjs";
+import { ListProjectsMenuItem } from "./menus/list.mjs";
+import { CreateProjectMenuItem } from "./menus/create.mjs";
+import { SyncProjectMenuItem } from "./menus/sync.mjs";
 
 @Module({
   providers: [
-    CreateProjectAction,
-    ListProjectsAction,
-    SyncProjectsAction,
+    CreateProjectMenuItem,
+    ListProjectsMenuItem,
+    SyncProjectAction,
+    SyncProjectMenuItem,
     ProjectMenu,
   ],
   exports: [ProjectMenu],

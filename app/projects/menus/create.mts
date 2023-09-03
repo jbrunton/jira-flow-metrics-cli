@@ -1,17 +1,29 @@
 import { Injectable } from "@nestjs/common";
-import { JiraFiltersRepository } from "../../../data/jira_filters_repository.js";
-import { input } from "@inquirer/prompts";
 import inquirer from "inquirer";
+import { input } from "@inquirer/prompts";
+import { CreateProjectParams } from "../../../domain/entities.js";
+import { JiraFiltersRepository } from "../../../data/jira_filters_repository.js";
+import { run } from "../../lib/actions/run.js";
 import { LocalProjectsRepository } from "../../../data/local_projects_repository.mjs";
+import { MenuItem } from "../../lib/menus/types.js";
 
 @Injectable()
-export class CreateProjectAction {
+export class CreateProjectMenuItem implements MenuItem {
+  readonly name = "Create project";
+
   constructor(
     private readonly filtersRepository: JiraFiltersRepository,
     private readonly projectsRepository: LocalProjectsRepository,
   ) {}
 
-  async run() {
+  async run(): Promise<void> {
+    const args = await this.readArgs();
+    await run("Create project", () =>
+      this.projectsRepository.createProject(args),
+    );
+  }
+
+  protected async readArgs(): Promise<CreateProjectParams> {
     const name = await input({ message: "Enter the project name" });
 
     const minLength = 2;
@@ -38,6 +50,6 @@ export class CreateProjectAction {
       },
     });
 
-    await this.projectsRepository.createProject({ name, jql });
+    return { name, jql };
   }
 }

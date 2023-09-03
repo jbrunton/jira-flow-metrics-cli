@@ -5,24 +5,29 @@ import { HierarchyLevel } from "../../../domain/entities.js";
 import { startOfDay, subDays } from "date-fns";
 import { promptInterval } from "../../lib/prompts/interval.mjs";
 import { promptTimeUnit } from "../../lib/prompts/time_unit.mjs";
-import { MenuItem } from "../../lib/menu_item.js";
 import {
   ThroughputReportAction,
   ThroughputReportActionArgs,
-  ThroughputReportActionResult,
 } from "./action.js";
-import { logger } from "../../lib/action_logger.js";
+import { logger } from "../../lib/actions/logger.js";
+import { run } from "../../lib/actions/run.js";
+import { MenuItem } from "../../lib/menus/types.js";
 
 @Injectable()
-export class ThroughputMenuItem extends MenuItem<
-  ThroughputReportActionArgs,
-  ThroughputReportActionResult
-> {
+export class ThroughputMenuItem implements MenuItem {
+  readonly name = "Throughout";
+
   constructor(
     private readonly projectsRepository: LocalProjectsRepository,
-    action: ThroughputReportAction,
-  ) {
-    super(action);
+    private readonly action: ThroughputReportAction,
+  ) {}
+
+  async run(): Promise<void> {
+    const args = await this.readArgs();
+    const { reportPath } = await run("Generating throughput report", () =>
+      this.action.run(args),
+    );
+    logger.info(`Report path: ${reportPath}`);
   }
 
   protected async readArgs(): Promise<ThroughputReportActionArgs> {
@@ -56,9 +61,5 @@ export class ThroughputMenuItem extends MenuItem<
       hierarchyLevel,
       timeUnit,
     };
-  }
-
-  onSuccess({ reportPath }: ThroughputReportActionResult): void {
-    logger.info(`Report path: ${reportPath}`);
   }
 }

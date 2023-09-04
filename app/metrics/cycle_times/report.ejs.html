@@ -16,6 +16,20 @@
     <div style="width: 100%"><canvas id="histogram"></canvas></div>
     <table>
       <thead>
+        <th>Percentile</th>
+        <th>Days</th>
+      </thead>
+      <tbody>
+        <% for (const { percentile, days } of percentiles) { %>
+        <tr>
+          <td><%= percentile %></td>
+          <td><%= days %></td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+    <table>
+      <thead>
         <th>Key</th>
         <th>Summary</th>
         <th>Started</th>

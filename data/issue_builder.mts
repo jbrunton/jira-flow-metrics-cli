@@ -149,8 +149,12 @@ export const getCycleTime = (
   started?: Date,
   completed?: Date,
 ): number | undefined => {
-  if (!started || !completed) {
+  if (!completed) {
     return undefined;
+  }
+
+  if (!started) {
+    return 0;
   }
 
   return (completed.getTime() - started.getTime()) / (1_000 * 60 * 60 * 24);

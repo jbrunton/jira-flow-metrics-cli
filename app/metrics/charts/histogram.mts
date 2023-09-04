@@ -12,7 +12,7 @@ export const buildHistogram = (issues: Issue[]) => {
   const maxCycleTime = Math.round(issues[0].cycleTime);
   const buckets = range(0, maxCycleTime + 1);
   const countItems = (days: number) =>
-    count((issue) => Math.round(issue.cycleTime) === days, issues);
+    count((issue) => Math.ceil(issue.cycleTime) === days, issues);
   const data = buckets.map(countItems);
 
   const histogram = {

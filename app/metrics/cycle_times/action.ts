@@ -70,6 +70,8 @@ export class CycleTimesReportAction {
         scatterplot,
         histogram,
         percentiles,
+        linkTo: (issue: Issue) =>
+          `${process.env.JIRA_HOST}/browse/${issue.key}`,
         format: {
           date: formatDate,
           number: formatNumber,

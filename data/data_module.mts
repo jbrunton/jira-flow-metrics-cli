@@ -9,6 +9,7 @@ import { JiraFiltersRepository } from "./jira_filters_repository.js";
 import { Version3Client } from "jira.js";
 import { client } from "./client.js";
 import { LocalDashboardsRepository } from "./local_dashboards_repository.mjs";
+import { JiraProjectsRepository } from "./jira_projects_repository.js";
 
 @Global()
 @Module({
@@ -21,6 +22,7 @@ import { LocalDashboardsRepository } from "./local_dashboards_repository.mjs";
     JiraFieldsRepository,
     JiraStatusRepository,
     JiraFiltersRepository,
+    JiraProjectsRepository,
     {
       provide: Version3Client,
       useValue: client,
@@ -35,6 +37,7 @@ import { LocalDashboardsRepository } from "./local_dashboards_repository.mjs";
     JiraFieldsRepository,
     JiraStatusRepository,
     JiraFiltersRepository,
+    JiraProjectsRepository,
   ],
 })
 export class DataModule {}

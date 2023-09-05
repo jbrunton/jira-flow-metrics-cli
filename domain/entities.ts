@@ -42,6 +42,11 @@ export type SerializedTransition = Omit<Transition, "date"> & {
   date: string;
 };
 
+export type JiraProject = {
+  name: string;
+  key: string;
+};
+
 export type Issue = {
   key: string;
   summary: string;

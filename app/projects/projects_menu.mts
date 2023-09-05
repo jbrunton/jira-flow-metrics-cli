@@ -3,6 +3,7 @@ import { ListProjectsMenuItem } from "./menus/list.mjs";
 import { CreateProjectMenuItem } from "./menus/create.mjs";
 import { SyncProjectMenuItem } from "./menus/sync.mjs";
 import { MenuFactory } from "../lib/menus/factory.js";
+import { RemoveProjectsMenuItem } from "./menus/remove.mjs";
 
 @Injectable()
 export class ProjectMenu extends MenuFactory {
@@ -10,11 +11,13 @@ export class ProjectMenu extends MenuFactory {
     listProjectsMenuItem: ListProjectsMenuItem,
     createProjectMenuItem: CreateProjectMenuItem,
     syncProjectsMenuItem: SyncProjectMenuItem,
+    removeProjectsMenuItem: RemoveProjectsMenuItem,
   ) {
     super("Projects", [
       listProjectsMenuItem,
       createProjectMenuItem,
       syncProjectsMenuItem,
+      removeProjectsMenuItem,
     ]);
   }
 }

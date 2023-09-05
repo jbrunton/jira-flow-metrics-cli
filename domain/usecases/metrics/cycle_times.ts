@@ -9,6 +9,7 @@ export type CycleTimeMetricsParams = {
   interval: Interval;
   hierarchyLevel: HierarchyLevel;
   excludeOutliers: boolean;
+  excludeUnstarted: boolean;
 };
 
 export type CycleTimeMetricsResult = {
@@ -21,6 +22,7 @@ export const cycleTimeMetrics = ({
   interval: { start, end },
   hierarchyLevel,
   excludeOutliers,
+  excludeUnstarted,
 }: CycleTimeMetricsParams): CycleTimeMetricsResult => {
   const sortedIssues = pipe(
     filter(
@@ -29,7 +31,8 @@ export const cycleTimeMetrics = ({
         issue.statusCategory === StatusCategory.Done &&
         issue.cycleTime !== undefined &&
         start <= issue.completed &&
-        issue.completed < end,
+        issue.completed < end &&
+        (!excludeUnstarted || issue.started !== undefined),
     ),
     sortBy((issue: Issue) => issue.cycleTime),
     reverse<Issue>,

@@ -17,6 +17,7 @@ export type CycleTimesReportArgs = {
   selectedProjectId: string;
   interval: Interval;
   excludeOutliers: boolean;
+  excludeUnstarted: boolean;
   hierarchyLevel: HierarchyLevel;
 };
 
@@ -34,6 +35,7 @@ export class CycleTimesReportAction {
   async run({
     selectedProjectId,
     excludeOutliers,
+    excludeUnstarted,
     interval,
     hierarchyLevel,
   }: CycleTimesReportArgs): Promise<CycleTimesReportResult> {
@@ -50,6 +52,7 @@ export class CycleTimesReportAction {
       interval,
       hierarchyLevel,
       excludeOutliers,
+      excludeUnstarted,
     });
 
     const scatterplot = buildScatterplot(interval, selectedIssues);

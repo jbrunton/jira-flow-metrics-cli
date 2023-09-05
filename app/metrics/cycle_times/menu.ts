@@ -50,6 +50,11 @@ export class CycleTimesMenuItem implements MenuItem {
       default: false,
     });
 
+    const excludeUnstarted = await confirm({
+      message: "Exclude issues which were never moved to in progress?",
+      default: true,
+    });
+
     const now = new Date();
     const defaultStart = subDays(startOfDay(now), 30);
     const interval = await promptInterval(defaultStart, now);
@@ -57,6 +62,7 @@ export class CycleTimesMenuItem implements MenuItem {
     return {
       selectedProjectId,
       excludeOutliers,
+      excludeUnstarted,
       hierarchyLevel,
       interval,
     };

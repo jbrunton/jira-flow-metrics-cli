@@ -1,5 +1,9 @@
 <head>
   <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.min.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+  />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
   <style>
@@ -30,10 +34,10 @@
     </table>
     <table width="100%">
       <thead>
-        <th>Key</th>
+        <th style="min-width: 120px">Issue</th>
         <th>Summary</th>
-        <th>Started</th>
-        <th>Completed</th>
+        <th style="min-width: 120px">Started</th>
+        <th style="min-width: 120px">Completed</th>
         <th>Cycle Time</th>
       </thead>
       <tbody>
@@ -43,7 +47,12 @@
         </tr>
         <% for (const issue of outliers) { %>
         <tr>
-          <td><%= issue.key %></td>
+          <td>
+            <%= issue.key %>
+            <a href="<%= linkTo(issue) %>" target="_blank"
+              ><i class="fa fa-up-right-from-square"></i
+            ></a>
+          </td>
           <td><%= issue.summary %></td>
           <td><%= format.date(issue.started) %></td>
           <td><%= format.date(issue.completed) %></td>
@@ -55,7 +64,12 @@
         </tr>
         <% } %> <% for (const issue of selectedIssues) { %>
         <tr>
-          <td><%= issue.key %></td>
+          <td>
+            <%= issue.key %>
+            <a href="<%= linkTo(issue) %>" target="_blank"
+              ><i class="fa fa-up-right-from-square"></i
+            ></a>
+          </td>
           <td><%= issue.summary %></td>
           <td><%= format.date(issue.started) %></td>
           <td><%= format.date(issue.completed) %></td>

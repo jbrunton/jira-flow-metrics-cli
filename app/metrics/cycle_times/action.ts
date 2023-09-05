@@ -17,6 +17,7 @@ export type CycleTimesReportArgs = {
   selectedProjectId: string;
   interval: Interval;
   excludeOutliers: boolean;
+  excludeUnstarted: boolean;
   hierarchyLevel: HierarchyLevel;
 };
 
@@ -34,6 +35,7 @@ export class CycleTimesReportAction {
   async run({
     selectedProjectId,
     excludeOutliers,
+    excludeUnstarted,
     interval,
     hierarchyLevel,
   }: CycleTimesReportArgs): Promise<CycleTimesReportResult> {
@@ -50,6 +52,7 @@ export class CycleTimesReportAction {
       interval,
       hierarchyLevel,
       excludeOutliers,
+      excludeUnstarted,
     });
 
     const scatterplot = buildScatterplot(interval, selectedIssues);
@@ -67,6 +70,8 @@ export class CycleTimesReportAction {
         scatterplot,
         histogram,
         percentiles,
+        linkTo: (issue: Issue) =>
+          `${process.env.JIRA_HOST}/browse/${issue.key}`,
         format: {
           date: formatDate,
           number: formatNumber,

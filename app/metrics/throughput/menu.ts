@@ -15,7 +15,7 @@ import { MenuItem } from "../../lib/menus/types.js";
 
 @Injectable()
 export class ThroughputMenuItem implements MenuItem {
-  readonly name = "Throughout";
+  readonly name = "Throughput";
 
   constructor(
     private readonly projectsRepository: LocalProjectsRepository,

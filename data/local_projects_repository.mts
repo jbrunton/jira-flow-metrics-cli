@@ -1,3 +1,4 @@
+import remove from "lodash/remove.js";
 import {
   Project,
   CreateProjectParams,
@@ -20,6 +21,11 @@ export class LocalProjectsRepository implements ProjectsRepository {
     await this.db.write();
 
     return params;
+  }
+
+  async removeProject(projectId: string) {
+    remove(this.db.data.projects, (project) => project.id === projectId);
+    await this.db.write();
   }
 
   async setSyncedDate(projectId: string, lastSynced: Date): Promise<Project> {

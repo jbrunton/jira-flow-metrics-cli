@@ -9,7 +9,7 @@ export const selectProjects = async (
     choices: projects.map((project) => ({
       name: project.name,
       value: project.id,
-      checked: true,
+      checked: false,
     })),
   });
 

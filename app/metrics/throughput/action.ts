@@ -8,6 +8,7 @@ import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { calculateThroughput } from "../../../domain/usecases/metrics/throughput.js";
 import { buildThroughputChart } from "../charts/throughput.mjs";
 import { Interval, TimeUnit } from "../../../domain/intervals.mjs";
+import { formatInterval, formatStep } from "../../lib/format.mjs";
 
 export type ThroughputReportActionArgs = {
   selectedProjectId: string;
@@ -48,17 +49,21 @@ export class ThroughputReportAction {
       timeUnit,
     });
 
-    const description = `${hierarchyLevel} throughput ${interval.start.toLocaleDateString()} - ${interval.end.toLocaleDateString()}`;
-
     const throughputChart = buildThroughputChart(timeUnit, throughputData);
 
     const report = await ejs.renderFile(
       "./app/metrics/throughput/report.ejs.html",
       {
         project: selectedProject,
-        description,
+        hierarchyLevel,
+        interval,
         throughputData,
         throughputChart,
+        timeUnit,
+        format: {
+          step: formatStep,
+          interval: formatInterval,
+        },
       },
     );
 

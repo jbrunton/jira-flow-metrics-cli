@@ -11,6 +11,7 @@ import { buildScatterplot } from "../charts/scatterplot.mjs";
 import { format } from "date-fns";
 import { Interval } from "../../../domain/intervals.mjs";
 import { quantileSeq } from "mathjs";
+import { formatDate, formatInterval, formatNumber } from "../../lib/format.mjs";
 
 export type CycleTimesReportArgs = {
   selectedProjectId: string;
@@ -55,18 +56,22 @@ export class CycleTimesReportAction {
     const histogram = buildHistogram(selectedIssues);
     const percentiles = getPercentiles(selectedIssues);
 
-    const description = `${hierarchyLevel} cycle times ${interval.start.toLocaleDateString()} - ${interval.end.toLocaleDateString()}`;
-
     const report = await ejs.renderFile(
       "./app/metrics/cycle_times/report.ejs.html",
       {
         project: selectedProject,
         selectedIssues,
         outliers,
-        description,
+        hierarchyLevel,
+        interval,
         scatterplot,
         histogram,
         percentiles,
+        format: {
+          date: formatDate,
+          number: formatNumber,
+          interval: formatInterval,
+        },
       },
     );
 

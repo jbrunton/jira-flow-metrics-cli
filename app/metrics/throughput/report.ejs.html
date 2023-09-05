@@ -11,7 +11,7 @@
 <main>
   <body>
     <h1><%= project.name %> - Throughput</h1>
-    <p><%= description %></p>
+    <p><%= hierarchyLevel %> throughput <%= format.interval(interval) %></p>
     <div style="width: 100%"><canvas id="throughput"></canvas></div>
     <table>
       <thead>
@@ -21,7 +21,7 @@
       <tbody>
         <% for (const row of throughputData) { %>
         <tr>
-          <td><%= row.date %></td>
+          <td><%= format.step(row.date, timeUnit) %></td>
           <td><%= row.count %></td>
         </tr>
         <% } %>

@@ -11,7 +11,7 @@
 <main>
   <body>
     <h1><%= project.name %> - Cycle Times</h1>
-    <p><%= description %></p>
+    <p><%= hierarchyLevel %> cycle times <%= format.interval(interval) %></p>
     <div style="width: 100%"><canvas id="scatterplot"></canvas></div>
     <div style="width: 100%"><canvas id="histogram"></canvas></div>
     <table>
@@ -22,13 +22,13 @@
       <tbody>
         <% for (const { percentile, days } of percentiles) { %>
         <tr>
-          <td><%= percentile %></td>
-          <td><%= days %></td>
+          <td><%= format.number(percentile, 0) %>%</td>
+          <td><%= format.number(days) %></td>
         </tr>
         <% } %>
       </tbody>
     </table>
-    <table>
+    <table width="100%">
       <thead>
         <th>Key</th>
         <th>Summary</th>
@@ -45,8 +45,8 @@
         <tr>
           <td><%= issue.key %></td>
           <td><%= issue.summary %></td>
-          <td><%= issue.started %></td>
-          <td><%= issue.completed %></td>
+          <td><%= format.date(issue.started) %></td>
+          <td><%= format.date(issue.completed) %></td>
           <td><%= issue.cycleTime %></td>
         </tr>
         <% } %>
@@ -57,9 +57,9 @@
         <tr>
           <td><%= issue.key %></td>
           <td><%= issue.summary %></td>
-          <td><%= issue.started %></td>
-          <td><%= issue.completed %></td>
-          <td><%= issue.cycleTime %></td>
+          <td><%= format.date(issue.started) %></td>
+          <td><%= format.date(issue.completed) %></td>
+          <td><%= format.number(issue.cycleTime) %></td>
         </tr>
         <% } %>
       </tbody>

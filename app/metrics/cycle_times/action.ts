@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { LocalProjectsRepository } from "../../../data/local_projects_repository.mjs";
 import { LocalIssuesRepository } from "../../../data/local_issues_repository.mjs";
-import { HierarchyLevel } from "../../../domain/entities.js";
+import { HierarchyLevel, Issue } from "../../../domain/entities.js";
 import { cycleTimeMetrics } from "../../../domain/usecases/metrics/cycle_times.js";
 import ejs from "ejs";
 import path, { join } from "path";
@@ -10,6 +10,7 @@ import { buildHistogram } from "../charts/histogram.mjs";
 import { buildScatterplot } from "../charts/scatterplot.mjs";
 import { format } from "date-fns";
 import { Interval } from "../../../domain/intervals.mjs";
+import { quantileSeq } from "mathjs";
 
 export type CycleTimesReportArgs = {
   selectedProjectId: string;
@@ -52,6 +53,7 @@ export class CycleTimesReportAction {
 
     const scatterplot = buildScatterplot(interval, selectedIssues);
     const histogram = buildHistogram(selectedIssues);
+    const percentiles = getPercentiles(selectedIssues);
 
     const description = `${hierarchyLevel} cycle times ${interval.start.toLocaleDateString()} - ${interval.end.toLocaleDateString()}`;
 
@@ -64,6 +66,7 @@ export class CycleTimesReportAction {
         description,
         scatterplot,
         histogram,
+        percentiles,
       },
     );
 
@@ -84,3 +87,27 @@ export class CycleTimesReportAction {
     return { reportPath };
   }
 }
+
+const getPercentiles = (
+  issues: Issue[],
+): { percentile: number; days: number }[] => {
+  const cycleTimes = issues.map((issue) => issue.cycleTime);
+
+  const quantiles =
+    issues.length > 20
+      ? [0.5, 0.7, 0.85, 0.95]
+      : issues.length > 10
+      ? [0.5, 0.7]
+      : issues.length > 5
+      ? [0.5]
+      : [];
+
+  const percentiles = quantiles.map((quantile) => {
+    return {
+      percentile: quantile * 100,
+      days: Math.ceil(quantileSeq(cycleTimes, quantile) as number),
+    };
+  });
+
+  return percentiles;
+};

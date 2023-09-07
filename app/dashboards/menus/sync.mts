@@ -76,6 +76,7 @@ export class SyncDashboardMenuItem implements MenuItem {
           hierarchyLevel: HierarchyLevel.Story,
           interval: getRelativeInterval(now, 30, TimeUnit.Day),
           excludeOutliers: false,
+          excludeUnstarted: true,
         }),
       ).then(({ reportPath }) => {
         reports.push({ project, name: "story cycle times", path: reportPath });
@@ -87,6 +88,7 @@ export class SyncDashboardMenuItem implements MenuItem {
           hierarchyLevel: HierarchyLevel.Epic,
           interval: getRelativeInterval(now, 3, TimeUnit.Month),
           excludeOutliers: false,
+          excludeUnstarted: true,
         }),
       ).then(({ reportPath }) => {
         reports.push({ project, name: "epic cycle times", path: reportPath });

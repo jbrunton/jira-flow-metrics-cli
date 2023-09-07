@@ -9,7 +9,7 @@ export class MenuFactory implements MenuItem {
     readonly name: string,
     choices: MenuItem[],
   ) {
-    this.choices = [...choices, cancelMenuItem];
+    this.choices = [...choices, cancelMenuItem()];
   }
 
   async run(): Promise<void> {

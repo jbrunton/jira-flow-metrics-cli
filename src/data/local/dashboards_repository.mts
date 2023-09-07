@@ -1,4 +1,4 @@
-import { DashboardsRepository, Dashboard } from "../domain/entities.js";
+import { DashboardsRepository, Dashboard } from "../../domain/entities.js";
 import { LocalDatabase } from "./db.mjs";
 import { Injectable } from "@nestjs/common";
 

@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { CreateProjectParams } from "../../../domain/entities.js";
 import { createHash } from "crypto";
-import { LocalProjectsRepository } from "../../../data/local_projects_repository.mjs";
+import { LocalProjectsRepository } from "../../../data/local/projects_repository.mjs";
 
 export type CreateProjectActionArgs = Pick<CreateProjectParams, "name" | "jql">;
 

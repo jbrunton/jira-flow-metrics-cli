@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { run } from "../../lib/actions/run.js";
 import { MenuItem } from "../../lib/menus/types.js";
-import { LocalDashboardsRepository } from "../../../data/local_dashboards_repository.mjs";
+import { LocalDashboardsRepository } from "../../../data/local/dashboards_repository.mjs";
 
 @Injectable()
 export class ListDashboardsMenuItem implements MenuItem {

@@ -3,7 +3,7 @@ import {
   Status,
   StatusCategory,
   StatusRepository,
-} from "../domain/entities.js";
+} from "../../domain/entities.js";
 import { reject, isNil } from "rambda";
 import { Injectable } from "@nestjs/common";
 

@@ -3,7 +3,7 @@ import { MenuItem } from "../../lib/menus/types.js";
 import { input } from "@inquirer/prompts";
 import { CreateDashboardAction } from "../actions/create.mjs";
 import { selectProjects } from "../../lib/prompts/projects.mjs";
-import { LocalProjectsRepository } from "../../../data/local_projects_repository.mjs";
+import { LocalProjectsRepository } from "../../../data/local/projects_repository.mjs";
 import { DashboardDefinition } from "../../../domain/entities.js";
 
 @Injectable()

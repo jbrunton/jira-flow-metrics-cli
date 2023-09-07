@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { LocalProjectsRepository } from "../../../data/local_projects_repository.mjs";
+import { LocalProjectsRepository } from "../../../data/local/projects_repository.mjs";
 import { select } from "@inquirer/prompts";
 import { HierarchyLevel } from "../../../domain/entities.js";
 import { startOfDay, subDays } from "date-fns";

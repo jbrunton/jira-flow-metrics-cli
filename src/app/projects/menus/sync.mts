@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { LocalProjectsRepository } from "../../../data/local_projects_repository.mjs";
+import { LocalProjectsRepository } from "../../../data/local/projects_repository.mjs";
 import { run } from "../../lib/actions/run.js";
 import { SyncProjectAction } from "../actions/sync.mjs";
 import { MenuItem } from "../../lib/menus/types.js";

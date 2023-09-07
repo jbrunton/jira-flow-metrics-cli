@@ -3,7 +3,7 @@ import {
   Project,
   CreateProjectParams,
   ProjectsRepository,
-} from "../domain/entities.js";
+} from "../../domain/entities.js";
 import { LocalDatabase } from "./db.mjs";
 import { Injectable } from "@nestjs/common";
 

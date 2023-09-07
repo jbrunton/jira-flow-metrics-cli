@@ -4,7 +4,8 @@
     "moduleResolution": "NodeNext",
     "target": "ES2017",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true
   },
   "ts-node": {
     "transpileOnly": true,

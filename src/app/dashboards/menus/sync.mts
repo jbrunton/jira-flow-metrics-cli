@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { MenuItem } from "../../lib/menus/types.js";
-import { LocalDashboardsRepository } from "../../../data/local_dashboards_repository.mjs";
+import { LocalDashboardsRepository } from "../../../data/local/dashboards_repository.mjs";
 import { SyncProjectAction } from "../../projects/actions/sync.mjs";
-import { LocalProjectsRepository } from "../../../data/local_projects_repository.mjs";
+import { LocalProjectsRepository } from "../../../data/local/projects_repository.mjs";
 import { select } from "@inquirer/prompts";
 import { CreateProjectAction } from "../../projects/actions/create.mjs";
 import { run } from "../../lib/actions/run.js";

@@ -12,12 +12,12 @@ import { compareAsc, compareDesc } from "date-fns";
 import {
   JiraIssueBuilder,
   getCycleTime,
-} from "../../../data/issue_builder.mjs";
-import { JiraFieldsRepository } from "../../../data/jira_fields_repository.js";
-import { JiraStatusRepository } from "../../../data/jira_status_repository.js";
-import { JiraIssuesRepository } from "../../../data/jira_issues_repository.js";
-import { LocalIssuesRepository } from "../../../data/local_issues_repository.mjs";
-import { LocalProjectsRepository } from "../../../data/local_projects_repository.mjs";
+} from "../../../data/jira/issue_builder.mjs";
+import { JiraFieldsRepository } from "../../../data/jira/fields_repository.js";
+import { JiraStatusRepository } from "../../../data/jira/status_repository.js";
+import { JiraIssuesRepository } from "../../../data/jira/issues_repository.js";
+import { LocalIssuesRepository } from "../../../data/local/issues_repository.mjs";
+import { LocalProjectsRepository } from "../../../data/local/projects_repository.mjs";
 import padStart from "lodash/padStart.js";
 import chalk from "chalk";
 

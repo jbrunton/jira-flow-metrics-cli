@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { LocalProjectsRepository } from "../../../data/local_projects_repository.mjs";
-import { LocalIssuesRepository } from "../../../data/local_issues_repository.mjs";
+import { LocalProjectsRepository } from "../../../data/local/projects_repository.mjs";
+import { LocalIssuesRepository } from "../../../data/local/issues_repository.mjs";
 import { HierarchyLevel, Issue } from "../../../domain/entities.js";
 import { cycleTimeMetrics } from "../../../domain/usecases/metrics/cycle_times.js";
 import ejs from "ejs";

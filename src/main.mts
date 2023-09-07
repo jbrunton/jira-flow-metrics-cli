@@ -1,5 +1,5 @@
 import { NestFactory } from "@nestjs/core";
-import { LocalDatabase } from "./data/db.mjs";
+import { LocalDatabase } from "./data/local/db.mjs";
 import "./app/lib/prompts/register.mjs";
 import { AppModule } from "./app/app_module.js";
 import { MainMenu } from "./app/main_menu.js";

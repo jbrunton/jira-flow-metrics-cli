@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { LocalProjectsRepository } from "../../../data/local_projects_repository.mjs";
-import { LocalIssuesRepository } from "../../../data/local_issues_repository.mjs";
+import { LocalProjectsRepository } from "../../../data/local/projects_repository.mjs";
+import { LocalIssuesRepository } from "../../../data/local/issues_repository.mjs";
 import { HierarchyLevel } from "../../../domain/entities.js";
 import ejs from "ejs";
 import path, { join } from "path";

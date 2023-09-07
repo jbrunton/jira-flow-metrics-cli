@@ -1,5 +1,5 @@
 import { Version3Client } from "jira.js";
-import { JiraProject } from "../domain/entities.js";
+import { JiraProject } from "../../domain/entities.js";
 import { reject, isNil } from "rambda";
 import { Injectable } from "@nestjs/common";
 

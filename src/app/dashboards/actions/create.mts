@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { downloadFile } from "../../lib/http/download_file.mjs";
-import { LocalDashboardsRepository } from "../../../data/local_dashboards_repository.mjs";
+import { LocalDashboardsRepository } from "../../../data/local/dashboards_repository.mjs";
 import { createHash } from "crypto";
 import { DashboardDefinition } from "../../../domain/entities.js";
 

@@ -1,4 +1,4 @@
-import { Issue } from "../../domain/entities.js";
+import { Issue } from "#entities/index.js";
 import { omit } from "rambda";
 import { LocalDatabase } from "./db.mjs";
 import { Injectable } from "@nestjs/common";

@@ -1,15 +1,15 @@
 import { Injectable } from "@nestjs/common";
-import { LocalProjectsRepository } from "../../../data/local/projects_repository.mjs";
-import { LocalIssuesRepository } from "../../../data/local/issues_repository.mjs";
-import { HierarchyLevel, Issue } from "../../../domain/entities.js";
-import { cycleTimeMetrics } from "../../../domain/usecases/metrics/cycle_times.js";
+import { LocalProjectsRepository } from "#data/local/projects_repository.mjs";
+import { LocalIssuesRepository } from "#data/local/issues_repository.mjs";
+import { HierarchyLevel, Issue } from "#entities/index.js";
+import { cycleTimeMetrics } from "#usecases/metrics/cycle_times.js";
 import ejs from "ejs";
 import path, { join } from "path";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { buildHistogram } from "../charts/histogram.mjs";
 import { buildScatterplot } from "../charts/scatterplot.mjs";
 import { format } from "date-fns";
-import { Interval } from "../../../domain/intervals.mjs";
+import { Interval } from "../../../domain/entities/intervals.mjs";
 import { quantileSeq } from "mathjs";
 import { formatDate, formatInterval, formatNumber } from "../../lib/format.mjs";
 

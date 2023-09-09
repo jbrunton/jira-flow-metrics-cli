@@ -1,7 +1,7 @@
 import { Low } from "lowdb";
 import { JSONFile } from "lowdb/node";
 import { Injectable } from "@nestjs/common";
-import { Dashboard, Issue, Project } from "../../domain/entities.js";
+import { Dashboard, Issue, Project } from "#entities/index.js";
 import { join } from "path";
 import { URL } from "url";
 

@@ -6,18 +6,15 @@ import {
   StatusCategory,
   isCompleted,
   isStarted,
-} from "../../../domain/entities.js";
+} from "#entities/index.js";
 import { map, pipe, pluck, sort } from "rambda";
 import { compareAsc, compareDesc } from "date-fns";
-import {
-  JiraIssueBuilder,
-  getCycleTime,
-} from "../../../data/jira/issue_builder.mjs";
-import { JiraFieldsRepository } from "../../../data/jira/fields_repository.js";
-import { JiraStatusRepository } from "../../../data/jira/status_repository.js";
-import { JiraIssuesRepository } from "../../../data/jira/issues_repository.js";
-import { LocalIssuesRepository } from "../../../data/local/issues_repository.mjs";
-import { LocalProjectsRepository } from "../../../data/local/projects_repository.mjs";
+import { JiraIssueBuilder, getCycleTime } from "#data/jira/issue_builder.mjs";
+import { JiraFieldsRepository } from "#data/jira/fields_repository.js";
+import { JiraStatusRepository } from "#data/jira/status_repository.js";
+import { JiraIssuesRepository } from "#data/jira/issues_repository.js";
+import { LocalIssuesRepository } from "#data/local/issues_repository.mjs";
+import { LocalProjectsRepository } from "#data/local/projects_repository.mjs";
 import padStart from "lodash/padStart.js";
 import chalk from "chalk";
 

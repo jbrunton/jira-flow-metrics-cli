@@ -1,9 +1,5 @@
 import { Version3Client } from "jira.js";
-import {
-  Issue,
-  IssuesRepository,
-  SearchParams,
-} from "../../domain/entities.js";
+import { Issue, IssuesRepository, SearchParams } from "#entities/index.js";
 import { mapLimit } from "async";
 import { range } from "rambda";
 import { Injectable } from "@nestjs/common";

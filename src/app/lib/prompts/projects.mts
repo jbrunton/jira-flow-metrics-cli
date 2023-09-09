@@ -1,5 +1,5 @@
 import { checkbox } from "@inquirer/prompts";
-import { Project } from "../../../domain/entities.js";
+import { Project } from "#entities/index.js";
 
 export const selectProjects = async (
   projects: Project[],

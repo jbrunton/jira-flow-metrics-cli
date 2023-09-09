@@ -7,7 +7,7 @@ import {
   Status,
   StatusCategory,
   Transition,
-} from "../../domain/entities.js";
+} from "#entities/index.js";
 import { reject, isNil } from "rambda";
 
 export class JiraIssueBuilder implements IssueBuilder {

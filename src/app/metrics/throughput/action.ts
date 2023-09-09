@@ -52,7 +52,7 @@ export class ThroughputReportAction {
     const throughputChart = buildThroughputChart(timeUnit, throughputData);
 
     const report = await ejs.renderFile(
-      "./app/metrics/throughput/report.ejs.html",
+      "./src/app/metrics/throughput/report.ejs.html",
       {
         project: selectedProject,
         hierarchyLevel,

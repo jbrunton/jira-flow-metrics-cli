@@ -60,7 +60,7 @@ export class CycleTimesReportAction {
     const percentiles = getPercentiles(selectedIssues);
 
     const report = await ejs.renderFile(
-      "./app/metrics/cycle_times/report.ejs.html",
+      "./src/app/metrics/cycle_times/report.ejs.html",
       {
         project: selectedProject,
         selectedIssues,

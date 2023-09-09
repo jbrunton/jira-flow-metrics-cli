@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { Interval, TimeUnit } from "../../domain/intervals.mjs";
+import { Interval, TimeUnit } from "../../domain/entities/intervals.mjs";
 
 export const formatDate = (date?: Date): string => {
   if (date === undefined) {

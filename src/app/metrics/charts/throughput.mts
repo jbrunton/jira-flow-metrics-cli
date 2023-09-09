@@ -1,5 +1,5 @@
-import { TimeUnit } from "../../../domain/intervals.mjs";
-import { ThroughputResult } from "../../../domain/usecases/metrics/throughput.js";
+import { TimeUnit } from "../../../domain/entities/intervals.mjs";
+import { ThroughputResult } from "#usecases/metrics/throughput.js";
 
 export const buildThroughputChart = (
   timeUnit: TimeUnit,

@@ -1,15 +1,15 @@
 import { Injectable } from "@nestjs/common";
 import inquirer from "inquirer";
 import { input, select } from "@inquirer/prompts";
-import { JiraFiltersRepository } from "../../../data/jira/filters_repository.js";
+import { JiraFiltersRepository } from "#data/jira/filters_repository.js";
 import { run } from "../../lib/actions/run.js";
 import { MenuItem } from "../../lib/menus/types.js";
 import {
   CreateProjectAction,
   CreateProjectActionArgs,
 } from "../actions/create.mjs";
-import { JiraProjectsRepository } from "../../../data/jira/projects_repository.js";
-import { Filter, JiraProject } from "../../../domain/entities.js";
+import { JiraProjectsRepository } from "#data/jira/projects_repository.js";
+import { Filter, JiraProject } from "#entities/index.js";
 
 @Injectable()
 export class CreateProjectMenuItem implements MenuItem {

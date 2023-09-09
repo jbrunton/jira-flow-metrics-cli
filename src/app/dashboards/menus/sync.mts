@@ -1,20 +1,19 @@
 import { Injectable } from "@nestjs/common";
 import { MenuItem } from "../../lib/menus/types.js";
-import { LocalDashboardsRepository } from "../../../data/local/dashboards_repository.mjs";
+import { LocalDashboardsRepository } from "#data/local/dashboards_repository.mjs";
 import { SyncProjectAction } from "../../projects/actions/sync.mjs";
-import { LocalProjectsRepository } from "../../../data/local/projects_repository.mjs";
+import { LocalProjectsRepository } from "#data/local/projects_repository.mjs";
 import { select } from "@inquirer/prompts";
 import { CreateProjectAction } from "../../projects/actions/create.mjs";
 import { run } from "../../lib/actions/run.js";
-import {
-  Dashboard,
-  HierarchyLevel,
-  Project,
-} from "../../../domain/entities.js";
+import { Dashboard, HierarchyLevel, Project } from "#entities/index.js";
 import { zip } from "rambda";
 import padEnd from "lodash/padEnd.js";
 import { CycleTimesReportAction } from "../../metrics/cycle_times/action.js";
-import { TimeUnit, getRelativeInterval } from "../../../domain/intervals.mjs";
+import {
+  TimeUnit,
+  getRelativeInterval,
+} from "../../../domain/entities/intervals.mjs";
 import ejs from "ejs";
 import { join } from "path";
 import { existsSync, mkdirSync, writeFileSync } from "fs";

@@ -1,9 +1,5 @@
 import { Version3Client } from "jira.js";
-import {
-  Status,
-  StatusCategory,
-  StatusRepository,
-} from "../../domain/entities.js";
+import { Status, StatusCategory, StatusRepository } from "#entities/index.js";
 import { reject, isNil } from "rambda";
 import { Injectable } from "@nestjs/common";
 

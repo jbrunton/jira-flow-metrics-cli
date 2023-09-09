@@ -4,6 +4,12 @@
   "description": "",
   "type": "module",
   "exports": "./src/main.js",
+  "imports": {
+    "#entities/*": "./src/domain/entities/*",
+    "#usecases/*": "./src/domain/usecases/*",
+    "#app/*": "./src/app/*",
+    "#data/*": "./src/data/*"
+  },
   "scripts": {
     "start": "ts-node --esm ./src/main.mts",
     "test": "echo \"Error: no test specified\" && exit 1",

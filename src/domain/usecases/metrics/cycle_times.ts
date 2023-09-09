@@ -1,8 +1,7 @@
-import { HierarchyLevel, StatusCategory } from "#entities/index.js";
+import { HierarchyLevel, StatusCategory, Issue } from "#entities/index.js";
 import { filter, sortBy, reverse, pipe } from "rambda";
-import { Issue } from "../../entities/index.js";
-import { excludeOutliersFromSeq } from "../../../app/outliers.js";
-import { Interval } from "../../entities/intervals.mjs";
+import { excludeOutliersFromSeq } from "./outliers.ts";
+import { Interval } from "#entities/intervals.mjs";
 
 export type CycleTimeMetricsParams = {
   issues: Issue[];

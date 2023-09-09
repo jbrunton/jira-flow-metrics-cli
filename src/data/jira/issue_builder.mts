@@ -3,14 +3,13 @@ import {
   Field,
   HierarchyLevel,
   Issue,
-  IssueBuilder,
   Status,
   StatusCategory,
   Transition,
 } from "#entities/index.js";
 import { reject, isNil } from "rambda";
 
-export class JiraIssueBuilder implements IssueBuilder {
+export class JiraIssueBuilder {
   private readonly statusCategories: { [externalId: string]: string } = {};
   private readonly epicLinkFieldId?: string;
   private readonly parentFieldId?: string;

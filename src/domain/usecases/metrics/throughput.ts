@@ -12,9 +12,9 @@ import {
   startOfMonth,
   startOfWeek,
 } from "date-fns";
-import { HierarchyLevel, Issue, StatusCategory } from "../../entities/index.js";
+import { HierarchyLevel, Issue, StatusCategory } from "#entities/index.js";
 import { count, range } from "rambda";
-import { Interval, TimeUnit } from "../../entities/intervals.mjs";
+import { Interval, TimeUnit } from "#entities/intervals.mjs";
 
 export type CalculateThroughputParams = {
   issues: Issue[];

@@ -2,7 +2,7 @@ import { createWriteStream, mkdtempSync, readFileSync } from "fs";
 import { RequestOptions, get } from "https";
 import { tmpdir } from "os";
 import { basename, join } from "path";
-import { URL } from "url";
+import { URL } from "node:url";
 
 export const downloadFile = async (remoteUrl: string): Promise<string> => {
   const url = new URL(remoteUrl);

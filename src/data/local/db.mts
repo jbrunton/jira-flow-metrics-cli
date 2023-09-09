@@ -2,8 +2,8 @@ import { Low } from "lowdb";
 import { JSONFile } from "lowdb/node";
 import { Injectable } from "@nestjs/common";
 import { Dashboard, Issue, Project } from "#entities/index.js";
-import { join } from "path";
-import { URL } from "url";
+import { join } from "node:path";
+import { URL } from "node:url";
 
 export type CachedIssue = Issue & {
   projectId: string;

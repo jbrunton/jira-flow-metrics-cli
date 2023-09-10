@@ -13,7 +13,7 @@ import {
   startOfWeek,
 } from "date-fns";
 import { HierarchyLevel, Issue, StatusCategory } from "#entities/index.js";
-import { count, range } from "rambda";
+import { filter, range } from "rambda";
 import { Interval, TimeUnit } from "#entities/intervals.mjs";
 
 export type CalculateThroughputParams = {
@@ -23,7 +23,7 @@ export type CalculateThroughputParams = {
   timeUnit: TimeUnit;
 };
 
-export type ThroughputResult = { date: Date; count: number }[];
+export type ThroughputResult = { date: Date; count: number; issues: Issue[] }[];
 
 export const calculateThroughput = ({
   issues,
@@ -63,7 +63,7 @@ export const calculateThroughput = ({
   );
 
   const result = intervals.map(({ start, end }) => {
-    const itemsCount = count(
+    const items = filter(
       (issue: Issue) =>
         issue.hierarchyLevel === hierarchyLevel &&
         issue.statusCategory === StatusCategory.Done &&
@@ -72,7 +72,7 @@ export const calculateThroughput = ({
         issue.completed < end,
       issues,
     );
-    return { date: start, count: itemsCount };
+    return { date: start, count: items.length, issues: items };
   });
 
   return result;

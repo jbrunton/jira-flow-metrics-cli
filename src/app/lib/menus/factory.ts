@@ -1,5 +1,4 @@
 import { select } from "@inquirer/prompts";
-import { cancelMenuItem } from "./cancel.js";
 import { MenuItem } from "./types.js";
 
 export class MenuFactory implements MenuItem {
@@ -9,7 +8,7 @@ export class MenuFactory implements MenuItem {
     readonly name: string,
     choices: MenuItem[],
   ) {
-    this.choices = [...choices, cancelMenuItem()];
+    this.choices = choices;
   }
 
   async run(): Promise<void> {
@@ -24,5 +23,9 @@ export class MenuFactory implements MenuItem {
     const menuItem = this.choices.find(({ name }) => name === selectedItem);
 
     await menuItem.run();
+
+    if (menuItem.value !== "cancel") {
+      return this.run();
+    }
   }
 }

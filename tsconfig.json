@@ -13,7 +13,7 @@
       "#entities/*": ["./src/domain/entities/*"],
       "#usecases/*": ["./src/domain/usecases/*"],
       "#data/*": ["./src/data/*"],
-      "#app/*": ["./src/app/*"],
+      "#app/*": ["./src/app/*"]
     }
   },
   "ts-node": {

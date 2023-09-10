@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { LocalProjectsRepository } from "#data/local/projects_repository.mjs";
 import { LocalIssuesRepository } from "#data/local/issues_repository.mjs";
-import { HierarchyLevel } from "#entities/index.js";
+import { HierarchyLevel, Issue } from "#entities/index.js";
 import ejs from "ejs";
 import path, { join } from "path";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
@@ -60,6 +60,8 @@ export class ThroughputReportAction {
         throughputData,
         throughputChart,
         timeUnit,
+        linkTo: (issue: Issue) =>
+          `${process.env.JIRA_HOST}/browse/${issue.key}`,
         format: {
           step: formatStep,
           interval: formatInterval,

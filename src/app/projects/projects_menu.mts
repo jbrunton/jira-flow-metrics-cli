@@ -4,6 +4,7 @@ import { CreateProjectMenuItem } from "./menus/create.mjs";
 import { SyncProjectMenuItem } from "./menus/sync.mjs";
 import { MenuFactory } from "../lib/menus/factory.js";
 import { RemoveProjectsMenuItem } from "./menus/remove.mjs";
+import { cancelMenuItem } from "#app/lib/menus/cancel.ts";
 
 @Injectable()
 export class ProjectMenu extends MenuFactory {
@@ -18,6 +19,7 @@ export class ProjectMenu extends MenuFactory {
       createProjectMenuItem,
       syncProjectsMenuItem,
       removeProjectsMenuItem,
+      cancelMenuItem(),
     ]);
   }
 }

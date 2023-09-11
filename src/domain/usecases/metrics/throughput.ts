@@ -35,7 +35,7 @@ export const calculateThroughput = ({
   );
 
   const result = intervals.map(({ start, end }) => {
-    const items = filter(
+    const completedIssues = filter(
       (issue: Issue) =>
         issue.hierarchyLevel === hierarchyLevel &&
         issue.statusCategory === StatusCategory.Done &&
@@ -44,7 +44,25 @@ export const calculateThroughput = ({
         issue.completed < end,
       issues,
     );
-    return { date: start, count: items.length, issues: items };
+
+    if (hierarchyLevel === HierarchyLevel.Epic) {
+      for (const epic of completedIssues) {
+        const completedChildren = issues.filter(
+          (issue) =>
+            issue.parentKey === epic.key &&
+            issue.statusCategory === StatusCategory.Done &&
+            issue.cycleTime !== undefined,
+        );
+        const completedChildrenCount = completedChildren.length;
+        Object.assign(epic, { completedChildrenCount });
+      }
+    }
+
+    return {
+      date: start,
+      count: completedIssues.length,
+      issues: completedIssues,
+    };
   });
 
   return result;

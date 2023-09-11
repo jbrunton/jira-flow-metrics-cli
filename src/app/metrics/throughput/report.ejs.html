@@ -20,7 +20,7 @@
     <table>
       <thead>
         <th>Date</th>
-        <th>Count</th>
+        <th>Completed issues</th>
         <th>Issues</th>
       </thead>
       <tbody>
@@ -31,17 +31,27 @@
           <td>
             <details>
               <summary>Issues</summary>
-              <ul>
-                <% for (const issue of row.issues) { %>
-                <li>
-                  <%= issue.key %>
-                  <a href="<%= linkTo(issue) %>" target="_blank"
-                    ><i class="fa fa-up-right-from-square"></i
-                  ></a>
-                  - <%= issue.summary %>
-                </li>
-                <% } %>
-              </ul>
+              <table>
+                <thead>
+                  <th style="min-width: 120px">Issue</th>
+                  <th>Summary</th>
+                  <th>Completed children</th>
+                </thead>
+                <tbody>
+                  <% for (const issue of row.issues) { %>
+                  <tr>
+                    <td>
+                      <%= issue.key %>
+                      <a href="<%= linkTo(issue) %>" target="_blank"
+                        ><i class="fa fa-up-right-from-square"></i
+                      ></a>
+                    </td>
+                    <td><%= issue.summary %></td>
+                    <td><%= issue.completedChildrenCount %></td>
+                  </tr>
+                  <% } %>
+                </tbody>
+              </table>
             </details>
           </td>
         </tr>

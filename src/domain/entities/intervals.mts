@@ -1,4 +1,10 @@
 import {
+  addDays,
+  addMonths,
+  addWeeks,
+  differenceInDays,
+  differenceInMonths,
+  differenceInWeeks,
   endOfDay,
   endOfMonth,
   endOfWeek,
@@ -61,5 +67,31 @@ export const subTime = (date: Date, count: number, unit: TimeUnit): Date => {
       return subWeeks(date, count);
     case TimeUnit.Month:
       return subMonths(date, count);
+  }
+};
+
+export const addTime = (date: Date, count: number, unit: TimeUnit): Date => {
+  switch (unit) {
+    case TimeUnit.Day:
+      return addDays(date, count);
+    case TimeUnit.Week:
+      return addWeeks(date, count);
+    case TimeUnit.Month:
+      return addMonths(date, count);
+  }
+};
+
+export const difference = (
+  dateLeft: Date,
+  dateRight: Date,
+  unit: TimeUnit,
+): number => {
+  switch (unit) {
+    case TimeUnit.Day:
+      return differenceInDays(dateLeft, dateRight);
+    case TimeUnit.Week:
+      return differenceInWeeks(dateLeft, dateRight);
+    case TimeUnit.Month:
+      return differenceInMonths(dateLeft, dateRight);
   }
 };

@@ -1,10 +1,10 @@
 import { Version3Client } from "jira.js";
-import { Status, StatusCategory, StatusRepository } from "#entities/index.js";
+import { Status, StatusCategory } from "#entities/issues.ts";
 import { reject, isNil } from "rambda";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
-export class JiraStatusRepository implements StatusRepository {
+export class JiraStatusRepository {
   constructor(private readonly client: Version3Client) {}
 
   async getStatuses(): Promise<Status[]> {

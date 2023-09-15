@@ -1,5 +1,5 @@
 import { differenceInMonths } from "date-fns";
-import { Issue } from "#entities/index.js";
+import { Issue } from "#entities/issues.ts";
 import { Interval } from "../../../domain/entities/intervals.mjs";
 
 export const buildScatterplot = ({ start, end }: Interval, issues: Issue[]) => {

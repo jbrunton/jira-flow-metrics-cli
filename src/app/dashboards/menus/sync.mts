@@ -6,7 +6,6 @@ import { LocalProjectsRepository } from "#data/local/projects_repository.mjs";
 import { select } from "@inquirer/prompts";
 import { CreateProjectAction } from "../../projects/actions/create.mjs";
 import { run } from "../../lib/actions/run.js";
-import { Dashboard, HierarchyLevel, Project } from "#entities/index.js";
 import { zip } from "rambda";
 import padEnd from "lodash/padEnd.js";
 import { CycleTimesReportAction } from "../../metrics/cycle_times/action.js";
@@ -17,6 +16,9 @@ import {
 import ejs from "ejs";
 import { join } from "path";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
+import { Dashboard } from "#entities/dashboards.mjs";
+import { Project } from "#entities/projects.mjs";
+import { HierarchyLevel } from "#entities/issues.ts";
 
 @Injectable()
 export class SyncDashboardMenuItem implements MenuItem {

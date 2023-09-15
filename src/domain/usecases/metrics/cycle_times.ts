@@ -1,4 +1,4 @@
-import { HierarchyLevel, StatusCategory, Issue } from "#entities/index.js";
+import { HierarchyLevel, StatusCategory, Issue } from "#entities/issues.ts";
 import { filter, sortBy, reverse, pipe } from "rambda";
 import { excludeOutliersFromSeq } from "./outliers.ts";
 import { Interval } from "#entities/intervals.mjs";

@@ -1,5 +1,5 @@
 import { count, range } from "rambda";
-import { Issue } from "#entities/index.js";
+import { Issue } from "#entities/issues.ts";
 //import { quantileSeq } from "mathjs";
 
 export type Histogram = {

@@ -1,4 +1,4 @@
-import { HierarchyLevel, Issue, StatusCategory } from "#entities/index.js";
+import { HierarchyLevel, Issue, StatusCategory } from "#entities/issues.ts";
 import { filter, range } from "rambda";
 import {
   Interval,

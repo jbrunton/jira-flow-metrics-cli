@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { LocalProjectsRepository } from "#data/local/projects_repository.mjs";
 import { LocalIssuesRepository } from "#data/local/issues_repository.mjs";
-import { HierarchyLevel, Issue } from "#entities/index.js";
+import { HierarchyLevel, Issue } from "#entities/issues.ts";
 import { cycleTimeMetrics } from "#usecases/metrics/cycle_times.js";
 import ejs from "ejs";
 import path, { join } from "path";

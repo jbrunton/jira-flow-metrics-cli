@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { LocalProjectsRepository } from "#data/local/projects_repository.mjs";
 import { confirm, select } from "@inquirer/prompts";
-import { HierarchyLevel } from "#entities/index.js";
+import { HierarchyLevel } from "#entities/issues.ts";
 import { startOfDay, subDays } from "date-fns";
 import { promptInterval } from "../../lib/prompts/interval.mjs";
 import { CycleTimesReportAction, CycleTimesReportArgs } from "./action.js";

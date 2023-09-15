@@ -1,14 +1,12 @@
 import remove from "lodash/remove.js";
-import {
-  Project,
-  CreateProjectParams,
-  ProjectsRepository,
-} from "#entities/index.js";
 import { LocalDatabase } from "./db.mjs";
 import { Injectable } from "@nestjs/common";
+import { Project } from "#entities/projects.mjs";
+
+export type CreateProjectParams = Pick<Project, "id" | "name" | "jql">;
 
 @Injectable()
-export class LocalProjectsRepository implements ProjectsRepository {
+export class LocalProjectsRepository {
   constructor(private readonly db: LocalDatabase) {}
 
   async getProjects(): Promise<Project[]> {

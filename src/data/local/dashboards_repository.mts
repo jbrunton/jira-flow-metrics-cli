@@ -1,9 +1,9 @@
-import { DashboardsRepository, Dashboard } from "#entities/index.js";
+import { Dashboard } from "#entities/dashboards.mjs";
 import { LocalDatabase } from "./db.mjs";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
-export class LocalDashboardsRepository implements DashboardsRepository {
+export class LocalDashboardsRepository {
   constructor(private readonly db: LocalDatabase) {}
 
   async getDashboards(): Promise<Dashboard[]> {

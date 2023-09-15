@@ -1,10 +1,10 @@
 import { Version3Client } from "jira.js";
-import { Field, FieldsRepository } from "#entities/index.js";
+import { Field } from "#entities/issues.ts";
 import { reject, isNil } from "rambda";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
-export class JiraFieldsRepository implements FieldsRepository {
+export class JiraFieldsRepository {
   constructor(private readonly client: Version3Client) {}
 
   async getFields(): Promise<Field[]> {

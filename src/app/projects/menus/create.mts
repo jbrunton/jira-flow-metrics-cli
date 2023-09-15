@@ -9,7 +9,7 @@ import {
   CreateProjectActionArgs,
 } from "../actions/create.mjs";
 import { JiraProjectsRepository } from "#data/jira/projects_repository.js";
-import { Filter, JiraProject } from "#entities/index.js";
+import { Filter, JiraProject } from "#entities/issues.ts";
 
 @Injectable()
 export class CreateProjectMenuItem implements MenuItem {

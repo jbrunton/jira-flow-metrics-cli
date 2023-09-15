@@ -1,10 +1,10 @@
 import { Version3Client } from "jira.js";
-import { Filter, FiltersRepository } from "#entities/index.js";
+import { Filter } from "#entities/issues.ts";
 import { reject, isNil } from "rambda";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
-export class JiraFiltersRepository implements FiltersRepository {
+export class JiraFiltersRepository {
   constructor(private readonly client: Version3Client) {}
 
   async getFilters(filterName?: string): Promise<Filter[]> {

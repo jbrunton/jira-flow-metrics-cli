@@ -2,11 +2,10 @@ import { Injectable } from "@nestjs/common";
 import {
   HierarchyLevel,
   Issue,
-  Project,
   StatusCategory,
   isCompleted,
   isStarted,
-} from "#entities/index.js";
+} from "#entities/issues.ts";
 import { map, pipe, pluck, sort } from "rambda";
 import { compareAsc, compareDesc } from "date-fns";
 import { JiraIssueBuilder, getCycleTime } from "#data/jira/issue_builder.mjs";
@@ -17,6 +16,7 @@ import { LocalIssuesRepository } from "#data/local/issues_repository.mjs";
 import { LocalProjectsRepository } from "#data/local/projects_repository.mjs";
 import padStart from "lodash/padStart.js";
 import chalk from "chalk";
+import { Project } from "#entities/projects.mjs";
 
 export type SyncProjectActionArgs = {
   project: Project;

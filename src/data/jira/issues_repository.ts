@@ -1,14 +1,19 @@
 import { Version3Client } from "jira.js";
-import { Issue, IssuesRepository, SearchParams } from "#entities/index.js";
+import { Issue } from "#entities/issues.ts";
 import { mapLimit } from "async";
 import { range } from "rambda";
 import { Injectable } from "@nestjs/common";
+import { JiraIssueBuilder } from "./issue_builder.mts";
+
+export type SearchParams = {
+  jql: string;
+  onProgress: (pageIndex: number, total: number) => void;
+  builder: JiraIssueBuilder;
+};
 
 @Injectable()
-export class JiraIssuesRepository extends IssuesRepository {
-  constructor(private readonly client: Version3Client) {
-    super();
-  }
+export class JiraIssuesRepository {
+  constructor(private readonly client: Version3Client) {}
 
   async search({ jql, onProgress, builder }: SearchParams): Promise<Issue[]> {
     const searchParams = {
